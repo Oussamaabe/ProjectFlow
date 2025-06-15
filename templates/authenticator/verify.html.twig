@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Verify{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Enter Your OTP</h1>
+
+    <form method="post">
+        <div class="mb-3">
+            <label for="otp" class="form-label">One-Time Password (OTP)</label>
+            <input type="text" name="otp" id="otp" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-secondary">Verify OTP</button>
+    </form>
+
+    {% if result is not null %}
+        <div class="mt-3">
+            {% if result %}
+                <div class="alert alert-success">✅ OTP verified successfully!</div>
+            {% else %}
+                <div class="alert alert-danger">❌ Invalid OTP. Please try again.</div>
+            {% endif %}
+        </div>
+    {% endif %}
+</div>
+{% endblock %}

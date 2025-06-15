@@ -1,0 +1,16 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Pair{% endblock %}
+
+{% block body %}
+<div class="container mt-5 text-center">
+    <h1 class="mb-4">Scan the QR Code</h1>
+
+    <img alt="QR Code" src="{{ qrCodeUri }}" class="img-fluid mb-4" />
+
+    <form method="post">
+        <input type="hidden" name="secret" value="{{ secret }}" />
+        <button type="submit" class="btn btn-success">Validate Pairing</button>
+    </form>
+</div>
+{% endblock %}
