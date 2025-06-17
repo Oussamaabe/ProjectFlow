@@ -11,35 +11,41 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Security\Http\Authentication\AuthenticationUtils;
 
 class RegistrationController extends AbstractController
 {
-    #[Route('/register', name: 'app_register')]
-    public function register(
-        Request $request,
-        UserPasswordHasherInterface $userPasswordHasher,
-        EntityManagerInterface $em,
-        Security $security
-    ): Response
-    {
-        $user = new User();
-        $form = $this->createForm(RegistrationFormType::class, $user);
-        $form->handleRequest($request);
+   #[Route('/register', name: 'app_register')]
+public function register(
+    Request $request,
+    UserPasswordHasherInterface $userPasswordHasher,
+    EntityManagerInterface $entityManager,
+    AuthenticationUtils $authenticationUtils
+): Response {
+    $user = new User();
+    $form = $this->createForm(RegistrationFormType::class, $user);
+    $form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $user->setPassword($userPasswordHasher->hashPassword($user, $form->get('plainPassword')->getData()));
+    if ($form->isSubmitted() && $form->isValid()) {
+        // Encodez le mot de passe
+        $user->setPassword(
+            $userPasswordHasher->hashPassword(
+                $user,
+                $form->get('plainPassword')->getData()
+            )
+        );
 
-            $em->persist($user);
-            $em->flush();
+        $entityManager->persist($user);
+        $entityManager->flush();
 
-            $security->login($user);
-
-            return $this->redirectToRoute('app_home_index');  // Redirect to home after registration
-        }
-
-        return $this->render('registration/register.html.twig', [
-            'registrationForm' => $form->createView(),
-        ]);
+        // Redirection vers la page de login avec message
+        $this->addFlash('success', 'Registration successful! Please login.');
+        return $this->redirectToRoute('app_login');
     }
+
+    return $this->render('registration/register.html.twig', [
+        'registrationForm' => $form->createView(),
+    ]);
+}
 }
 

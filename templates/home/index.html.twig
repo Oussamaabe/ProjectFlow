@@ -4,11 +4,14 @@
 
 {% block body %}
 <div class="container mt-5">
-    <h1 class="mb-4">Two-Factor Authentication</h1>
-
-    <div class="d-flex gap-3">
-        <a href="{{ path('app_authenticator_pair') }}" class="btn btn-primary">Pair</a>
-        <a href="{{ path('app_authenticator_verify') }}" class="btn btn-secondary">Verify</a>
+    <h1 class="mb-4">Welcome to Your Dashboard</h1>
+    
+    <!-- Contenu normal de votre page d'accueil -->
+    <p>You are now logged in.</p>
+    
+    <!-- Optionnel: Lien vers la page 2FA si vous voulez -->
+    <div class="mt-4">
+        <a href="{{ path('app_authenticator_pair') }}" class="btn btn-primary">Configure 2FA</a>
     </div>
 </div>
 {% endblock %}
