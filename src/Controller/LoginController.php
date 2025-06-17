@@ -1,5 +1,5 @@
 <?php
-
+// LoginController.php
 namespace App\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -13,7 +13,6 @@ class LoginController extends AbstractController
     public function index(AuthenticationUtils $authenticationUtils): Response
     {
         $error = $authenticationUtils->getLastAuthenticationError();
-
         $lastUsername = $authenticationUtils->getLastUsername();
 
         return $this->render('login/index.html.twig',  [
@@ -23,3 +22,4 @@ class LoginController extends AbstractController
         ]);
     }
 }
+

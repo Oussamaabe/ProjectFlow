@@ -1,5 +1,5 @@
 <?php
-
+// RegistrationController.php
 namespace App\Controller;
 
 use App\Entity\User;
@@ -34,7 +34,7 @@ class RegistrationController extends AbstractController
 
             $security->login($user);
 
-            return $this->redirectToRoute('app_home_index');
+            return $this->redirectToRoute('app_home_index');  // Redirect to home after registration
         }
 
         return $this->render('registration/register.html.twig', [
@@ -42,3 +42,4 @@ class RegistrationController extends AbstractController
         ]);
     }
 }
+
