@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <h1 class="mb-4">Mon Profil</h1>
+
+    {{ form_start(profileForm) }}
+        <div class="row">
+            <div class="col-md-6">
+                {{ form_row(profileForm.username) }}
+                {{ form_row(profileForm.email) }} {# Nouveau champ #}
+                {{ form_row(profileForm.plainPassword.first) }}
+                {{ form_row(profileForm.plainPassword.second) }}
+            </div>
+            <div class="col-md-6">
+                {{ form_row(profileForm.address) }}
+                {{ form_row(profileForm.phoneNumber) }}
+                {{ form_row(profileForm.birthDate) }}
+                {{ form_row(profileForm.gender) }}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+    {{ form_end(profileForm) }}
+</div>
+{% endblock %}

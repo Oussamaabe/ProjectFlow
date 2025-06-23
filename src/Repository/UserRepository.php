@@ -39,6 +39,16 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
         $this->getEntityManager()->flush();
     }
 
+    // src/Repository/UserRepository.php
+public function findExpiredResetTokenUsers(): array
+{
+    return $this->createQueryBuilder('u')
+        ->where('u.tokenExpiresAt < :now')
+        ->setParameter('now', new \DateTimeImmutable())
+        ->getQuery()
+        ->getResult();
+}
+
 //    /**
 //     * @return User[] Returns an array of User objects
 //     */

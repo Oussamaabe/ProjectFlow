@@ -1,5 +1,6 @@
 parameters:
     app.issuer: Amazaune
+    app.mailer_from: '%env(APP_MAILER_FROM)%'
 
 services:
     # default configuration for services in *this* file
