@@ -1,0 +1,54 @@
+    {% extends 'base.html.twig' %}
+
+    {% block title %}Gestion des Groupes{% endblock %}
+
+    {% block body %}
+        <h1 class="mb-4">Liste des Groupes</h1>
+
+        <a href="{{ path('app_group_new') }}" class="btn btn-primary mb-3">
+            <i class="fas fa-plus"></i> Créer un nouveau groupe
+        </a>
+
+        <div class="table-responsive">
+            <table class="table table-striped">
+                <thead class="thead-dark">
+                    <tr>
+                        <th>Nom</th>
+                        <th>Rôles</th>
+                        <th>Membres</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for group in groups %}
+                    <tr>
+                        <td>{{ group.name }}</td>
+                        <td>
+                                {% if group.roles is iterable %}
+                                    {% for role in group.roles %}
+                                        <span class="badge bg-secondary">{{ role|replace({'ROLE_': ''})|capitalize }}</span>
+                                {% endfor %}
+                                {% else %}
+                                    <span class="text-muted">Aucun rôle</span>
+                                {% endif %}
+                        </td>
+                        <td>{{ group.users|length }} membres</td>
+                        <td>
+                            <a href="{{ path('app_group_show', {'id': group.id}) }}" class="btn btn-sm btn-info">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ path('app_group_edit', {'id': group.id}) }}" class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            {{ include('group/_delete_form.html.twig') }}
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td colspan="4">Aucun groupe trouvé</td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endblock %}

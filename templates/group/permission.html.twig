@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gérer les permissions - {{ group.name }}{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h1 class="h4 mb-0">
+                <i class="fas fa-key me-2"></i>Gérer les permissions du groupe {{ group.name }}
+            </h1>
+        </div>
+        
+        <div class="card-body">
+            {{ form_start(form, {'attr': {'class': 'permissions-form'}}) }}
+            
+                <div class="row mb-4">
+                    <div class="col-md-12">
+                        <h3 class="h5 mb-3 text-muted">
+                            <i class="fas fa-list-check me-2"></i>Permissions disponibles
+                        </h3>
+                        <div class="permissions-container bg-light p-3 rounded">
+                            {{ form_row(form.permissions, {
+                                'label': false,
+                                'attr': {
+                                    'class': 'permission-checkboxes'
+                                }
+                            }) }}
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-actions d-flex justify-content-between">
+                    <a href="{{ path('app_group_show', {'id': group.id}) }}" class="btn btn-outline-secondary">
+                        <i class="fas fa-arrow-left me-2"></i>Retour au groupe
+                    </a>
+                    <button type="submit" class="btn btn-success">
+                        <i class="fas fa-save me-2"></i>{{ button_label|default('Enregistrer les permissions') }}
+                    </button>
+                </div>
+                
+            {{ form_end(form) }}
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block stylesheets %}
+<style>
+    .permission-checkboxes {
+        columns: 3;
+        column-gap: 2rem;
+    }
+    
+    @media (max-width: 992px) {
+        .permission-checkboxes {
+            columns: 2;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .permission-checkboxes {
+            columns: 1;
+        }
+    }
+    
+    .form-check {
+        break-inside: avoid;
+        margin-bottom: 0.5rem;
+    }
+</style>
+{% endblock %}
+
+{% block javascripts %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Ajoute des tooltips pour les permissions
+    document.querySelectorAll('.form-check-label').forEach(label => {
+        const permissionId = label.getAttribute('for');
+        const checkbox = document.getElementById(permissionId);
+        if (checkbox) {
+            label.setAttribute('title', checkbox.value);
+            label.classList.add('cursor-help');
+        }
+    });
+});
+</script>
+{% endblock %}
