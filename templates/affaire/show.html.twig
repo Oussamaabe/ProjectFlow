@@ -1,0 +1,113 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Détails de l'affaire - {{ affaire.titre }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Affaire: {{ affaire.titre }}</h1>
+            <div>
+                <a href="{{ path('app_affaire_index') }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Informations générales</h5>
+                        <p><strong>Type:</strong> {{ affaire.getTypeLabel() }}</p>
+                        <p><strong>Client:</strong> {{ affaire.client }}</p>
+                        <p><strong>Statut:</strong> 
+                            <span class="badge {{ affaire.getStatusBadgeClass() }}">
+                                {{ affaire.getStatusLabel() }}
+                            </span>
+                        </p>
+                        <p><strong>Date début:</strong> {{ affaire.dateDebut|date('d/m/Y') }}</p>
+                        {% if affaire.dateFin %}
+                            <p><strong>Date fin:</strong> {{ affaire.dateFin|date('d/m/Y') }}</p>
+                        {% endif %}
+                        {% if affaire.montant %}
+                            <p><strong>Montant:</strong> {{ affaire.montant|format_currency('EUR') }}</p>
+                        {% endif %}
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Détails</h5>
+                        {% if affaire.description %}
+                            <p>{{ affaire.description }}</p>
+                        {% endif %}
+                        
+                        {% if affaire.resultat %}
+                            <div class="mt-3">
+                                <h5>Résultat</h5>
+                                <p>{{ affaire.resultat }}</p>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        {# Section Projet - Ligne 62 corrigée #}
+        {% if affaire.projet %}
+            <div class="alert alert-success">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <h5>
+                            <i class="fas fa-project-diagram me-2"></i>
+                            Projet associé
+                        </h5>
+                        <p class="mb-0">
+                            <a href="{{ path('app_projet_show', {'id': affaire.projet.id}) }}">
+                                {{ affaire.projet.nom }}
+                            </a>
+                            - Créé le {{ affaire.projet.dateDebut|date('d/m/Y') }}
+                        </p>
+                    </div>
+                    <a href="{{ path('app_projet_show', {'id': affaire.projet.id}) }}" class="btn btn-outline-success">
+                        <i class="fas fa-external-link-alt me-2"></i> Voir le projet
+                    </a>
+                </div>
+            </div>
+        {% elseif affaire.status == constant('App\\Enum\\AffaireStatus::ADJUDICATAIRE').value %}
+            <div class="alert alert-warning">
+                <div class="d-flex justify-content-between align-items-center">
+                    <div>
+                        <i class="fas fa-exclamation-circle me-2"></i>
+                        Cette affaire adjudicataire n'a pas encore de projet associé
+                    </div>
+                    <form method="post" action="{{ path('app_affaire_create_project', {'id': affaire.id}) }}">
+                        <button class="btn btn-success">
+                            <i class="fas fa-project-diagram me-2"></i> Créer un projet
+                        </button>
+                    </form>
+                </div>
+            </div>
+        {% endif %}
+        
+        <div class="d-flex justify-content-end gap-2">
+            <a href="{{ path('app_affaire_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Retour à la liste
+            </a>
+            
+            {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_AGENT') %}
+                <a href="{{ path('app_affaire_edit', {'id': affaire.id}) }}" class="btn btn-warning">
+                    <i class="fas fa-edit me-2"></i> Modifier
+                </a>
+            {% endif %}
+            
+            {% if is_granted('ROLE_ADMIN') %}
+                <form method="post" action="{{ path('app_affaire_delete', {'id': affaire.id}) }}" 
+                      class="d-inline" 
+                      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette affaire?');">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ affaire.id) }}">
+                    <button class="btn btn-danger">
+                        <i class="fas fa-trash me-2"></i> Supprimer
+                    </button>
+                </form>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

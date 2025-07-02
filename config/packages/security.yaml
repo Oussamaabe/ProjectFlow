@@ -32,6 +32,11 @@ security:
         - { path: ^/dashboard, roles: ROLE_USER }
         - { path: ^/authenticator/pair, roles: ROLE_USER }
         - { path: ^/profile, roles: ROLE_USER }
+        - { path: ^/affaires/new, roles: [ROLE_ADMIN, ROLE_AGENT] }
+        - { path: ^/affaires/\d+/edit, roles: [ROLE_ADMIN, ROLE_AGENT] }
+        - { path: ^/affaires/\d+/create-project, roles: [ROLE_ADMIN, ROLE_AGENT] }
+        - { path: ^/affaires/\d+, roles: [ROLE_ADMIN, ROLE_AGENT] }
+        - { path: ^/affaires, roles: [ROLE_ADMIN, ROLE_AGENT] }
 
 when@test:
     security:

@@ -3,3 +3,36 @@ controllers:
         path: ../src/Controller/
         namespace: App\Controller
     type: attribute
+app_affaire_index:
+    path: /affaires
+    controller: App\Controller\AffaireController::index
+    methods: GET
+
+app_affaire_new:
+    path: /affaires/new
+    controller: App\Controller\AffaireController::new
+    methods: [GET, POST]
+
+app_affaire_show:
+    path: /affaires/{id}
+    controller: App\Controller\AffaireController::show
+    methods: GET
+
+app_affaire_edit:
+    path: /affaires/{id}/edit
+    controller: App\Controller\AffaireController::edit
+    methods: [GET, POST]
+
+app_affaire_create_project:
+    path: /affaires/{id}/create-project
+    controller: App\Controller\AffaireController::createProject
+    methods: POST
+
+app_affaire_delete:
+    path: /affaires/{id}
+    controller: App\Controller\AffaireController::delete
+    methods: POST
+app_projet_show:
+    path: /projets/{id}
+    controller: App\Controller\ProjetController::show
+    methods: GET

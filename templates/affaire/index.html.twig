@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Affaires{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <h1>Gestion des Affaires</h1>
+        
+        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_AGENT') %}
+            <div class="mb-3">
+                <a href="{{ path('app_affaire_new') }}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nouvelle affaire
+                </a>
+            </div>
+        {% endif %}
+
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Titre</th>
+                    <th>Type</th>
+                    <th>Client</th>
+                    <th>Statut</th>
+                    <th>Début</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for affaire in affaires %}
+                <tr>
+                    <td>{{ affaire.titre }}</td>
+                    <td>{{ affaire.getTypeLabel() }}</td>
+                    <td>{{ affaire.client }}</td>
+                    <td>
+                        <span class="badge {{ affaire.getStatusBadgeClass() }}">
+                            {{ affaire.getStatusLabel() }}
+                        </span>
+                    </td>
+                    <td>{{ affaire.dateDebut|date('d/m/Y') }}</td>
+                    <td>
+                        <a href="{{ path('app_affaire_show', {'id': affaire.id}) }}" 
+                           class="btn btn-sm btn-info">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        
+                        {% if is_granted('ROLE_ADMIN') or is_granted('ROLE_AGENT') %}
+                            <a href="{{ path('app_affaire_edit', {'id': affaire.id}) }}" 
+                               class="btn btn-sm btn-warning">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        {% endif %}
+                        
+                        {% if is_granted('ROLE_ADMIN') %}
+                            <form method="post" action="{{ path('app_affaire_delete', {'id': affaire.id}) }}" 
+                                  class="d-inline"
+                                  onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer cette affaire?');">
+                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ affaire.id) }}">
+                                <button class="btn btn-sm btn-danger">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        {% endif %}
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6" class="text-center">Aucune affaire enregistrée</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

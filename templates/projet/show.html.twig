@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Projet: {{ projet.nom }}{% endblock %}
+
+{% block body %}
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Projet: {{ projet.nom }}</h1>
+            <a href="{{ path('app_affaire_show', {'id': projet.affaire.id}) }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Retour à l'affaire
+            </a>
+        </div>
+        
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5>Informations générales</h5>
+                        <p><strong>Nom:</strong> {{ projet.nom }}</p>
+                        <p><strong>Date de début:</strong> {{ projet.dateDebut|date('d/m/Y') }}</p>
+                        {% if projet.dateFinPrevue %}
+                            <p><strong>Date de fin prévue:</strong> {{ projet.dateFinPrevue|date('d/m/Y') }}</p>
+                        {% endif %}
+                        <p><strong>Affaire associée:</strong>
+                            <a href="{{ path('app_affaire_show', {'id': projet.affaire.id}) }}">
+                                {{ projet.affaire.titre }}
+                            </a>
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5>Description</h5>
+                        {% if projet.description %}
+                            <p>{{ projet.description }}</p>
+                        {% else %}
+                            <p class="text-muted">Aucune description fournie</p>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-end">
+            <a href="{{ path('app_affaire_edit', {'id': projet.affaire.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit me-2"></i> Modifier l'affaire associée
+            </a>
+        </div>
+    </div>
+{% endblock %}

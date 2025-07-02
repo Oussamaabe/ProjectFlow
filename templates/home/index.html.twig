@@ -1,17 +1,101 @@
+{# templates/home/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Home{% endblock %}
+{% block title %}ProjectFlow - Gestion de Projets{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1 class="mb-4">Welcome to Your Dashboard</h1>
+<div class="welcome-hero">
+    <div class="container text-center">
+        <h1 class="display-4 fw-bold">Gérez vos projets avec efficacité</h1>
+        <p class="lead">ProjectFlow est la solution tout-en-un pour la gestion de vos affaires, projets et équipes</p>
+        
+        {% if not is_granted('IS_AUTHENTICATED_FULLY') %}
+            <div class="mt-4">
+                <a href="{{ path('app_register') }}" class="btn btn-light btn-lg px-4 me-3">
+                    <i class="fas fa-rocket me-2"></i>Commencer gratuitement
+                </a>
+                <a href="{{ path('app_login') }}" class="btn btn-outline-light btn-lg px-4">
+                    <i class="fas fa-sign-in-alt me-2"></i>Connexion
+                </a>
+            </div>
+        {% else %}
+            <div class="mt-4">
+                <a href="{{ path('app_dashboard') }}" class="btn btn-light btn-lg px-4">
+                    <i class="fas fa-tachometer-alt me-2"></i>Accéder au Dashboard
+                </a>
+            </div>
+        {% endif %}
+    </div>
+</div>
+
+<div class="container">
+    <div class="text-center mb-5">
+        <h2 class="fw-bold">Pourquoi choisir ProjectFlow?</h2>
+        <p class="text-muted">Découvrez les fonctionnalités qui font la différence</p>
+    </div>
     
-    <!-- Contenu normal de votre page d'accueil -->
-    <p>You are now logged in.</p>
+    <div class="row g-4">
+        <div class="col-md-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-tasks"></i>
+                    </div>
+                    <h4>Gestion des Projets</h4>
+                    <p class="text-muted">Suivez l'avancement de vos projets, assignez des tâches et gérez les échéances efficacement.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Tableaux de Bord</h4>
+                    <p class="text-muted">Visualisez vos indicateurs clés avec des tableaux de bord personnalisables et intuitifs.</p>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4">
+            <div class="card feature-card h-100">
+                <div class="card-body text-center p-4">
+                    <div class="feature-icon">
+                        <i class="fas fa-handshake"></i>
+                    </div>
+                    <h4>Gestion des Affaires</h4>
+                    <p class="text-muted">Suivez vos opportunités commerciales du premier contact jusqu'à la réalisation.</p>
+                </div>
+            </div>
+        </div>
+    </div>
     
-    <!-- Optionnel: Lien vers la page 2FA si vous voulez -->
-    <div class="mt-4">
-        <a href="{{ path('app_authenticator_pair') }}" class="btn btn-primary">Configure 2FA</a>
+    <div class="row mt-5 align-items-center">
+        <div class="col-md-6">
+            <h3 class="fw-bold">Centralisez vos informations</h3>
+            <p class="text-muted">ProjectFlow vous permet de regrouper toutes les informations essentielles au bon déroulement de vos projets :</p>
+            <ul class="text-muted">
+                <li>Documents et contrats</li>
+                <li>Suivi des délais et échéances</li>
+                <li>Communication d'équipe</li>
+                <li>Indicateurs de performance</li>
+            </ul>
+        </div>
+        <div class="col-md-6 text-center">
+            <img src="https://via.placeholder.com/500x300?text=ProjectFlow+Dashboard" alt="Dashboard ProjectFlow" class="img-fluid rounded shadow">
+        </div>
+    </div>
+    
+    <div class="row mt-5 mb-5">
+        <div class="col-12 text-center">
+            <h3 class="fw-bold">Prêt à transformer votre gestion de projets?</h3>
+            <p class="text-muted mb-4">Rejoignez des centaines d'entreprises qui utilisent déjà ProjectFlow</p>
+            <a href="{{ path('app_register') }}" class="btn btn-primary btn-lg px-5">
+                <i class="fas fa-play-circle me-2"></i>Essayer gratuitement
+            </a>
+        </div>
     </div>
 </div>
 {% endblock %}

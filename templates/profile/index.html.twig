@@ -1,27 +1,151 @@
+{# templates/profile/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon Profil{% endblock %}
+{% block title %}Mon Profil - ProjectFlow{% endblock %}
 
 {% block body %}
-<div class="container mt-5">
-    <h1 class="mb-4">Mon Profil</h1>
-
-    {{ form_start(profileForm) }}
-        <div class="row">
-            <div class="col-md-6">
-                {{ form_row(profileForm.username) }}
-                {{ form_row(profileForm.email) }} {# Nouveau champ #}
-                {{ form_row(profileForm.plainPassword.first) }}
-                {{ form_row(profileForm.plainPassword.second) }}
-            </div>
-            <div class="col-md-6">
-                {{ form_row(profileForm.address) }}
-                {{ form_row(profileForm.phoneNumber) }}
-                {{ form_row(profileForm.birthDate) }}
-                {{ form_row(profileForm.gender) }}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-4">
+            <div class="card">
+                <div class="card-body text-center">
+                    <img src="https://ui-avatars.com/api/?name={{ app.user.username }}&background=4361ee&color=fff" 
+                         class="profile-avatar" 
+                         alt="Avatar de {{ app.user.username }}">
+                    
+                    <h4>{{ app.user.username }}</h4>
+                    <p class="text-muted">{{ app.user.email }}</p>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn btn-outline-primary">
+                            <i class="fas fa-camera me-2"></i>Changer la photo
+                        </button>
+                        <button class="btn btn-outline-secondary">
+                            <i class="fas fa-lock me-2"></i>Modifier le mot de passe
+                        </button>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <h5>Statistiques</h5>
+                    <div class="row mt-3">
+                        <div class="col-6">
+                            <div class="stat-number">12</div>
+                            <div class="stat-label">Projets</div>
+                        </div>
+                        <div class="col-6">
+                            <div class="stat-number">42</div>
+                            <div class="stat-label">Tâches</div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
-        <button type="submit" class="btn btn-primary">Mettre à jour</button>
-    {{ form_end(profileForm) }}
+        
+        <div class="col-md-8">
+            <div class="card">
+                <div class="card-header">
+                    <i class="fas fa-user-edit me-2"></i>Informations du Profil
+                </div>
+                <div class="card-body">
+                    {{ form_start(profileForm) }}
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.username, {
+                                    'label': "Nom d'utilisateur",
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.email, {
+                                    'label': 'Adresse Email',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.plainPassword.first, {
+                                    'label': 'Nouveau mot de passe',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.plainPassword.second, {
+                                    'label': 'Confirmation',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                        </div>
+                        
+                        <h5 class="mt-4 mb-3">Informations complémentaires</h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.address, {
+                                    'label': 'Adresse',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.phoneNumber, {
+                                    'label': 'Téléphone',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                        </div>
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.birthDate, {
+                                    'label': 'Date de naissance',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.gender, {
+                                    'label': 'Genre',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary px-4">
+                                <i class="fas fa-save me-2"></i>Enregistrer
+                            </button>
+                        </div>
+                    {{ form_end(profileForm) }}
+                </div>
+            </div>
+            
+            <div class="card mt-4">
+                <div class="card-header">
+                    <i class="fas fa-shield-alt me-2"></i>Sécurité du Compte
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div>
+                            <h6>Authentification à deux facteurs</h6>
+                            <p class="text-muted mb-0">Ajoutez une couche de sécurité supplémentaire à votre compte</p>
+                        </div>
+                        <div class="form-check form-switch">
+                            <input class="form-check-input" type="checkbox" id="2faSwitch">
+                            <label class="form-check-label" for="2faSwitch">Activé</label>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <h6>Sessions actives</h6>
+                            <p class="text-muted mb-0">2 appareils connectés</p>
+                        </div>
+                        <a href="#" class="btn btn-sm btn-outline-primary">Gérer</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}
