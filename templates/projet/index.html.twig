@@ -1,0 +1,109 @@
+{# templates/projet/index.html.twig #}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}Gestion des Projets{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Gestion des Projets</h1>
+    
+    <ul class="nav nav-tabs mb-4" id="projectTabs" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="ongoing-tab" data-bs-toggle="tab" data-bs-target="#ongoing" type="button" role="tab">
+                Projets en Cours
+            </button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab">
+                Projets Achevés
+            </button>
+        </li>
+    </ul>
+
+    <div class="tab-content" id="projectTabsContent">
+        <div class="tab-pane fade show active" id="ongoing" role="tabpanel">
+            <div class="row">
+                {% for projet in projetsEnCours %}
+                    <div class="col-md-6 mb-4">
+                        <div class="card h-100">
+                            <div class="card-header bg-info text-white">
+                                <h5 class="mb-0">{{ projet.nom }}</h5>
+                            </div>
+                            <div class="card-body">
+                                <div class="d-flex justify-content-between mb-2">
+                                    <span><strong>Date début:</strong> {{ projet.dateDebut|date('d/m/Y') }}</span>
+                                    {% if projet.dateFinPrevue %}
+                                        <span><strong>Fin prévue:</strong> {{ projet.dateFinPrevue|date('d/m/Y') }}</span>
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <strong>Affaire associée:</strong>
+                                    {% if projet.affaire %}
+                                        <a href="{{ path('app_affaire_show', {'id': projet.affaire.id}) }}">
+                                            {{ projet.affaire.titre }}
+                                        </a>
+                                    {% else %}
+                                        Aucune
+                                    {% endif %}
+                                </div>
+                                
+                                <div class="d-grid gap-2">
+                                    <a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-folder-open me-1"></i> Détails
+                                    </a>
+                                    <a href="{{ path('app_projet_manage', {'id': projet.id}) }}" class="btn btn-sm btn-outline-success">
+                                        <i class="fas fa-edit me-1"></i> Gérer
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">Aucun projet en cours</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+        
+        <div class="tab-pane fade" id="completed" role="tabpanel">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Nom</th>
+                            <th>Date début</th>
+                            <th>Date fin</th>
+                            <th>Client</th>
+                            <th>Montant</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                    {% for projet in projetsAcheves %}
+                        <tr>
+                            <td>{{ projet.nom }}</td>
+                            <td>{{ projet.dateDebut|date('d/m/Y') }}</td>
+                            <td>{{ projet.dateFinPrevue ? projet.dateFinPrevue|date('d/m/Y') : '-' }}</td>
+                            <td>{{ projet.affaire ? projet.affaire.client : '-' }}</td>
+                            <td>{{ projet.affaire and projet.affaire.montant ? projet.affaire.montant|format_currency('EUR') : '-' }}</td>
+                            <td>
+                                <a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="btn btn-sm btn-info">
+                                    <i class="fas fa-eye"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="text-center">Aucun projet achevé</td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

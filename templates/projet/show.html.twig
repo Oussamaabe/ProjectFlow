@@ -1,48 +1,193 @@
+{# templates/projet/show.html.twig #}
+
 {% extends 'base.html.twig' %}
 
-{% block title %}Projet: {{ projet.nom }}{% endblock %}
+{% block title %}Détails du Projet - {{ projet.nom }}{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
-            <h1>Projet: {{ projet.nom }}</h1>
-            <a href="{{ path('app_affaire_show', {'id': projet.affaire.id}) }}" class="btn btn-secondary">
-                <i class="fas fa-arrow-left me-2"></i> Retour à l'affaire
-            </a>
-        </div>
-        
-        <div class="card mb-4">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h5>Informations générales</h5>
-                        <p><strong>Nom:</strong> {{ projet.nom }}</p>
-                        <p><strong>Date de début:</strong> {{ projet.dateDebut|date('d/m/Y') }}</p>
-                        {% if projet.dateFinPrevue %}
-                            <p><strong>Date de fin prévue:</strong> {{ projet.dateFinPrevue|date('d/m/Y') }}</p>
-                        {% endif %}
-                        <p><strong>Affaire associée:</strong>
-                            <a href="{{ path('app_affaire_show', {'id': projet.affaire.id}) }}">
-                                {{ projet.affaire.titre }}
-                            </a>
-                        </p>
-                    </div>
-                    <div class="col-md-6">
-                        <h5>Description</h5>
-                        {% if projet.description %}
-                            <p>{{ projet.description }}</p>
-                        {% else %}
-                            <p class="text-muted">Aucune description fournie</p>
-                        {% endif %}
-                    </div>
-                </div>
-            </div>
-        </div>
-        
-        <div class="d-flex justify-content-end">
-            <a href="{{ path('app_affaire_edit', {'id': projet.affaire.id}) }}" class="btn btn-warning">
-                <i class="fas fa-edit me-2"></i> Modifier l'affaire associée
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1>Projet: {{ projet.nom }}</h1>
+        <div>
+            <a href="{{ path('app_projet_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-2"></i> Retour
             </a>
         </div>
     </div>
+
+
+
+<!-- Section Délais -->
+<div class="card mb-4">
+    <div class="card-header bg-primary text-white">
+        <h5 class="mb-0">
+            <i class="fas fa-calendar-alt me-2"></i> Étapes du projet
+        </h5>
+    </div>
+    <div class="card-body">
+        {% for deadline in formatted.deadlines %}
+            <div class="mb-4 p-3 border rounded">
+                <h6>{{ deadline.name }}</h6>
+                <div class="row">
+                    <div class="col-md-3">
+                        <p><strong>Date prévue:</strong> {{ deadline.planned }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p><strong>Date réelle:</strong> {{ deadline.actual }}</p>
+                    </div>
+                    <div class="col-md-3">
+                        <p><strong>Statut:</strong> 
+                            {% if deadline.status == 'planned' %}
+                                <span class="badge bg-info">Planifié</span>
+                            {% elseif deadline.status == 'in_progress' %}
+                                <span class="badge bg-primary">En cours</span>
+                            {% elseif deadline.status == 'completed' %}
+                                <span class="badge bg-success">Terminé</span>
+                            {% elseif deadline.status == 'delayed' %}
+                                <span class="badge bg-warning">En retard</span>
+                            {% else %}
+                                {{ deadline.status }}
+                            {% endif %}
+                        </p>
+                    </div>
+                </div>
+            </div>
+        {% else %}
+            <div class="alert alert-info">
+                Aucune étape définie pour ce projet
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+<!-- ... autres sections ... -->
+
+    <!-- Section Bordereau des prix -->
+    <div class="card mb-4">
+        <div class="card-header bg-success text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-receipt me-2"></i> Bordereau des prix
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Description</th>
+                            <th>Quantité</th>
+                            <th>Unité</th>
+                            <th>Prix unitaire</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for item in formatted.priceList %}
+                            <tr>
+                                <td>{{ item.description }}</td>
+                                <td>{{ item.quantity }}</td>
+                                <td>{{ item.unit }}</td>
+                                <td>{{ item.unitPrice }} €</td>
+                                <td>{{ item.total }} €</td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="5" class="text-center">Aucun élément dans le bordereau</td>
+                            </tr>
+                        {% endfor %}
+                        <tr class="table-primary">
+                            <td colspan="4" class="text-end fw-bold">Total</td>
+                            <td class="fw-bold">{{ totalPrice|number_format(2) }} €</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Factures -->
+    <div class="card mb-4">
+        <div class="card-header bg-warning text-dark">
+            <h5 class="mb-0">
+                <i class="fas fa-file-invoice me-2"></i> Factures et décomptes
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Référence</th>
+                            <th>Montant</th>
+                            <th>Statut</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for invoice in formatted.invoices %}
+                            <tr>
+                                <td>{{ invoice.reference }}</td>
+                                <td>{{ invoice.amount }} €</td>
+                                <td>
+                                    {% if invoice.status == 'pending' %}
+                                        <span class="badge bg-warning">En attente</span>
+                                    {% elseif invoice.status == 'paid' %}
+                                        <span class="badge bg-success">Payée</span>
+                                    {% elseif invoice.status == 'overdue' %}
+                                        <span class="badge bg-danger">En retard</span>
+                                    {% else %}
+                                        {{ invoice.status }}
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="3" class="text-center">Aucune facture enregistrée</td>
+                            </tr>
+                        {% endfor %}
+                        <tr class="table-info">
+                            <td colspan="1" class="text-end fw-bold">Total facturé</td>
+                            <td class="fw-bold">{{ totalInvoiced|number_format(2) }} €</td>
+                            <td></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Documents -->
+    <div class="card">
+        <div class="card-header bg-secondary text-white">
+            <h5 class="mb-0">
+                <i class="fas fa-file-alt me-2"></i> Documents du projet
+            </h5>
+        </div>
+        <div class="card-body">
+            <div class="row">
+                {% for document in formatted.documents %}
+                    <div class="col-md-4 mb-3">
+                        <div class="card">
+                            <div class="card-body">
+                                <h6 class="card-title">{{ document.name }}</h6>
+                                <p class="card-text">
+                                    <small class="text-muted">
+                                        Type: {{ document.type }}<br>
+                                        Ajouté le: {{ document.date }}
+                                    </small>
+                                </p>
+                                <a href="#" class="btn btn-sm btn-outline-primary">
+                                    <i class="fas fa-download me-1"></i> Télécharger
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                {% else %}
+                    <div class="col-12">
+                        <div class="alert alert-info">Aucun document disponible</div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

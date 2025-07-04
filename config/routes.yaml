@@ -36,3 +36,8 @@ app_projet_show:
     path: /projets/{id}
     controller: App\Controller\ProjetController::show
     methods: GET
+
+app_projet_index:
+    path: /projets
+    controller: App\Controller\ProjetController::index
+    methods: GET

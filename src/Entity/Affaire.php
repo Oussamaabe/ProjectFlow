@@ -1,5 +1,5 @@
 <?php
-
+// src/Entity/Affaire.php
 namespace App\Entity;
 
 use App\Enum\AffaireStatus;
