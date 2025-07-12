@@ -1,0 +1,114 @@
+{% extends 'base.html.twig' %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function updateFormFields(type) {
+            document.getElementById('ressource_role').parentElement.style.display = 'none';
+            document.getElementById('ressource_heures').parentElement.style.display = 'none';
+            document.getElementById('ressource_quantite').parentElement.style.display = 'none';
+            document.getElementById('ressource_unite').parentElement.style.display = 'none';
+
+            if (type === '{{ types.humain }}') {
+                document.getElementById('ressource_role').parentElement.style.display = 'block';
+                document.getElementById('ressource_heures').parentElement.style.display = 'block';
+            } else if (type === '{{ types.materiel }}') {
+                document.getElementById('ressource_quantite').parentElement.style.display = 'block';
+            } else if (type === '{{ types.matiere }}') {
+                document.getElementById('ressource_quantite').parentElement.style.display = 'block';
+                document.getElementById('ressource_unite').parentElement.style.display = 'block';
+            }
+        }
+
+        document.addEventListener('DOMContentLoaded', function() {
+            const typeSelect = document.getElementById('ressource_type');
+            if (typeSelect) {
+                updateFormFields(typeSelect.value);
+                typeSelect.addEventListener('change', function () {
+                    updateFormFields(this.value);
+                });
+            }
+        });
+    </script>
+{% endblock %}
+
+{% block body %}
+<div class="container mt-4">
+    <h1>Suivi des ressources - {{ projet.nom }}</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h3>Ajouter une ressource</h3>
+                </div>
+                <div class="card-body">
+                    {{ form_start(form) }}
+                    {{ form_widget(form) }}
+                    <button type="submit" class="btn btn-primary mt-3">Ajouter</button>
+                    {{ form_end(form) }}
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header">
+                    <h3>Liste des ressources</h3>
+                </div>
+                <div class="scrollable-table">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Type</th>
+                <th>Nom</th>
+                <th>Détails</th>
+                <th>Coût unitaire</th>
+                <th>Total</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for ressource in ressources %}
+                <tr>
+                    <td>{{ ressource.type }}</td>
+                    <td>{{ ressource.nom }}</td>
+                    <td>
+                        {% if ressource.type == types.humain %}
+                            {{ ressource.role }} ({{ ressource.heures }}h)
+                        {% elseif ressource.type == types.materiel %}
+                            {{ ressource.quantite }} unités
+                        {% else %}
+                            {{ ressource.quantite }} {{ ressource.unite }}
+                        {% endif %}
+                    </td>
+                    <td>{{ ressource.coutUnitaire|number_format(2) }} €</td>
+                    <td>{{ ressource.getCoutTotal()|number_format(2) }} €</td>
+                    <td>
+                        <a href="{{ path('app_suivi_ressource_edit', {id: ressource.id}) }}" class="btn btn-sm btn-warning"> <i class="fas fa-edit"></i></a>
+                        <form action="{{ path('app_suivi_ressource_delete', {id: ressource.id}) }}" method="post" style="display:inline-block;" onsubmit="return confirm('Confirmer la suppression ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ ressource.id) }}">
+                            <button class="btn btn-sm btn-danger"><i class="fas fa-trash"></i></button>
+                        </form>
+                    </td>
+                </tr>
+            {% else %}
+                <tr>
+                    <td colspan="6">Aucune ressource enregistrée</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+        <tfoot>
+            <tr class="table-primary">
+                <td colspan="5" class="text-end fw-bold">Total</td>
+                <td class="fw-bold">{{ total|number_format(2) }} €</td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -41,3 +41,4 @@ app_projet_index:
     path: /projets
     controller: App\Controller\ProjetController::index
     methods: GET
+

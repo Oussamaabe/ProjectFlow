@@ -1,34 +1,63 @@
+{# templates/group/_form.html.twig #}
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {{ form_start(form) }}
-    <div class="row">
+    <div class="row mb-4">
         <div class="col-md-6">
             {{ form_row(form.name, {
-                label: 'Nom du groupe'
+                'label': 'Nom du groupe',
+                'attr': {'class': 'form-control-lg'}
             }) }}
         </div>
         <div class="col-md-6">
             {{ form_row(form.roles, {
-                label: 'Rôles attribués'
+                'label': 'Rôles attribués',
+                'attr': {'class': 'form-select-lg'}
             }) }}
         </div>
     </div>
 
-    <div class="row mt-3">
-        <div class="col-md-12">
-            {{ form_row(form.users, {
-                label: 'Membres du groupe',
-                attr: { multiple: 'multiple', class: 'form-select' }
-            }) }}
-        </div>
+    <div class="mb-4">
+        {{ form_row(form.users, {
+            'label': 'Membres du groupe',
+            'attr': {'class': 'form-select-lg', 'size': '8'}
+        }) }}
     </div>
 
-    <div class="mt-4">
-        <button type="submit" class="btn btn-success">
-            <i class="fas fa-save"></i> {{ button_label|default('Enregistrer') }}
+    <div class="d-flex justify-content-between align-items-center mt-5">
+        <button type="submit" class="btn btn-primary btn-lg">
+            <i class="fas fa-save me-2"></i> {{ button_label|default('Enregistrer') }}
         </button>
-        <a href="{{ path('app_group_index') }}" class="btn btn-outline-secondary">
-            <i class="fas fa-arrow-left"></i> Retour à la liste
-        </a>
+        
+        {% if delete_form is defined %}
+            <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" 
+                    data-bs-target="#deleteModal">
+                <i class="fas fa-trash me-2"></i>Supprimer
+            </button>
+        {% endif %}
     </div>
 {{ form_end(form) }}
+
+{% if delete_form is defined %}
+<!-- Delete Modal -->
+<div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Confirmer la suppression</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Êtes-vous sûr de vouloir supprimer ce groupe ? Cette action est irréversible.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <form method="post" action="{{ path('app_group_delete', {'id': group.id}) }}">
+                    <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ group.id) }}">
+                    <button class="btn btn-danger">Confirmer la suppression</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %}

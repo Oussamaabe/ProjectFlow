@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Fonctionnalités - ProjectFlow{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Découvrez nos fonctionnalités</h1>
+    
+    <div class="row">
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-tasks fa-3x text-primary mb-3"></i>
+                <h3>Gestion de Projets</h3>
+                <p>Planifiez, suivez et gérez vos projets avec des outils puissants et intuitifs.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-calendar-alt fa-3x text-primary mb-3"></i>
+                <h3>Suivi des Délais</h3>
+                <p>Définissez des étapes et des échéances, et recevez des alertes pour les dates importantes.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-file-invoice-dollar fa-3x text-primary mb-3"></i>
+                <h3>Bordereau des Prix</h3>
+                <p>Créez et gérez des bordereaux de prix détaillés pour vos projets et affaires.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-receipt fa-3x text-primary mb-3"></i>
+                <h3>Facturation</h3>
+                <p>Générez et suivez vos factures et décomptes en quelques clics.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-folder-open fa-3x text-primary mb-3"></i>
+                <h3>Gestion Documentaire</h3>
+                <p>Centralisez tous vos documents de projet au même endroit.</p>
+            </div>
+        </div>
+        
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="feature-box">
+                <i class="fas fa-chart-bar fa-3x text-primary mb-3"></i>
+                <h3>Rapports et Statistiques</h3>
+                <p>Analysez les performances de vos projets avec des rapports détaillés.</p>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card bg-light border-0">
+                <div class="card-body p-5 text-center">
+                    <h2 class="mb-4">Prêt à transformer votre gestion de projet ?</h2>
+                    <p class="lead mb-4">Essayez ProjectFlow gratuitement pendant 14 jours</p>
+                    <a href="{{ path('app_register') }}" class="btn btn-primary btn-lg">
+                        <i class="fas fa-rocket me-2"></i>Commencer l'essai gratuit
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -78,4 +78,91 @@ class ProjetRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
+    // src/Repository/ProjetRepository.php
+
+
+    public function getStatusDistribution(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "
+            SELECT 
+                CASE 
+                    WHEN p.is_completed = 1 THEN 'Terminé' 
+                    ELSE 'En cours' 
+                END AS status,
+                COUNT(p.id) AS count
+            FROM projet p
+            GROUP BY p.is_completed
+        ";
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+
+        return $result->fetchAllAssociative();
+    }
+
+    public function getMonthlyProjectEvolution(): array
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "
+            SELECT 
+                DATE_FORMAT(p.date_debut, '%Y-%m') AS month, 
+                COUNT(p.id) AS count
+            FROM projet p
+            GROUP BY month
+            ORDER BY month ASC
+        ";
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+
+        return $result->fetchAllAssociative();
+    }
+
+    public function getAverageCompletionTime(): ?string
+    {
+        $conn = $this->getEntityManager()->getConnection();
+
+        $sql = "
+            SELECT 
+                AVG(DATEDIFF(p.date_fin_prevue, p.date_debut)) AS avg_days
+            FROM projet p
+            WHERE p.is_completed = 1
+        ";
+
+        $stmt = $conn->prepare($sql);
+        $result = $stmt->executeQuery();
+        $data = $result->fetchAssociative();
+
+        return $data['avg_days'] ? round($data['avg_days']) . ' jours' : null;
+    }
+
+    public function findTopBudgetProjects(int $limit = 5): array
+{
+    $conn = $this->getEntityManager()->getConnection();
+    
+    $sql = "
+        SELECT 
+            p.id,
+            p.nom,
+            (SELECT SUM(JSON_EXTRACT(pl.value, '$.quantity') * JSON_EXTRACT(pl.value, '$.unitPrice'))
+             FROM JSON_TABLE(
+                 p.price_list,
+                 '$[*]' COLUMNS(
+                     value JSON PATH '$'
+                 )
+             ) AS pl) AS total_budget
+        FROM projet p
+        ORDER BY total_budget DESC
+        LIMIT :limit
+    ";
+    
+    $stmt = $conn->prepare($sql);
+    $stmt->bindValue('limit', $limit, \PDO::PARAM_INT);
+    $result = $stmt->executeQuery();
+    
+    return $result->fetchAllAssociative();
+}
 }

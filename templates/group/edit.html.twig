@@ -1,8 +1,21 @@
+{# templates/group/edit.html.twig #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Modifier {{ group.name }}{% endblock %}
 
 {% block body %}
-    <h1>Modifier le groupe "{{ group.name }}"</h1>
-    {{ include('group/_form.html.twig') }}
+<div class="container py-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3 mb-0">Modifier "{{ group.name }}"</h1>
+        <a href="{{ path('app_group_index') }}" class="btn btn-outline-secondary">
+            <i class="fas fa-arrow-left me-2"></i>Retour
+        </a>
+    </div>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            {{ include('group/_form.html.twig') }}
+        </div>
+    </div>
+</div>
 {% endblock %}

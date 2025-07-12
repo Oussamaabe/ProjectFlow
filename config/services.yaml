@@ -1,6 +1,8 @@
 parameters:
     app.issuer: Amazaune
     app.mailer_from: '%env(APP_MAILER_FROM)%'
+    documents_directory: '%kernel.project_dir%/public/uploads/documents'
+    profile_images_directory: '%kernel.project_dir%/public/uploads/profile_images'
 
 services:
     # default configuration for services in *this* file

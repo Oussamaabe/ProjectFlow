@@ -46,15 +46,31 @@ class DeadlineType extends AbstractType
                 'attr' => ['class' => 'form-select mb-2']
             ]);
 
-        // Transformateurs pour les dates
+        // Transformateurs pour gérer les différents formats de date
         $dateTransformer = new CallbackTransformer(
-            // Transforme DateTime en string pour l'affichage
+            // Transforme la valeur stockée en valeur pour le formulaire
             function ($date) {
-                return $date instanceof \DateTimeInterface ? $date->format('Y-m-d') : $date;
+                if ($date instanceof \DateTimeInterface) {
+                    return $date->format('Y-m-d');
+                }
+                
+                if (is_array($date) && isset($date['date'])) {
+                    return $date['date'];
+                }
+                
+                return $date;
             },
-            // Transforme string en DateTime pour le stockage
+            // Transforme la valeur du formulaire en valeur pour le stockage
             function ($dateString) {
-                return $dateString ? \DateTime::createFromFormat('Y-m-d', $dateString) : null;
+                if (empty($dateString)) {
+                    return null;
+                }
+                
+                try {
+                    return \DateTime::createFromFormat('Y-m-d', $dateString);
+                } catch (\Exception $e) {
+                    return $dateString;
+                }
             }
         );
 

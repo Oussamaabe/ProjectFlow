@@ -1,0 +1,95 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Contact - ProjectFlow{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Contactez-nous</h1>
+    
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <div class="row mb-5">
+                        <div class="col-md-4 text-center mb-4 mb-md-0">
+                            <div class="bg-primary text-white rounded-circle p-3 d-inline-block mb-3">
+                                <i class="fas fa-map-marker-alt fa-2x"></i>
+                            </div>
+                            <h5>Adresse</h5>
+                            <p>123 Avenue des Projets<br>Casablanca, Maroc</p>
+                        </div>
+                        <div class="col-md-4 text-center mb-4 mb-md-0">
+                            <div class="bg-primary text-white rounded-circle p-3 d-inline-block mb-3">
+                                <i class="fas fa-phone fa-2x"></i>
+                            </div>
+                            <h5>Téléphone</h5>
+                            <p>+212 6 12 34 56 78</p>
+                        </div>
+                        <div class="col-md-4 text-center">
+                            <div class="bg-primary text-white rounded-circle p-3 d-inline-block mb-3">
+                                <i class="fas fa-envelope fa-2x"></i>
+                            </div>
+                            <h5>Email</h5>
+                            <p>contact@projectflow.ma</p>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-5 text-center">
+                        <h3 class="mb-4">Suivez-nous</h3>
+                        <div class="d-flex justify-content-center">
+                            <a href="#" class="btn btn-outline-primary btn-social mx-2">
+                                <i class="fab fa-facebook-f"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline-primary btn-social mx-2">
+                                <i class="fab fa-twitter"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline-primary btn-social mx-2">
+                                <i class="fab fa-linkedin-in"></i>
+                            </a>
+                            <a href="#" class="btn btn-outline-primary btn-social mx-2">
+                                <i class="fab fa-instagram"></i>
+                            </a>
+                        </div>
+                    </div>
+                    
+                    <h3 class="text-center mb-4">Envoyez-nous un message</h3>
+                    <form>
+                        <div class="mb-3">
+                            <label for="name" class="form-label">Nom complet</label>
+                            <input type="text" class="form-control" id="name" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email" class="form-label">Adresse email</label>
+                            <input type="email" class="form-control" id="email" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="subject" class="form-label">Sujet</label>
+                            <input type="text" class="form-control" id="subject" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="message" class="form-label">Message</label>
+                            <textarea class="form-control" id="message" rows="5" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Envoyer
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .btn-social {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+    }
+</style>
+{% endblock %}

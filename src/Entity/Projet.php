@@ -49,7 +49,8 @@ class Projet
     #[ORM\Column(type: 'json', nullable: true)]
     private ?array $invoices = null;
 
-
+    #[ORM\OneToMany(targetEntity: Ressource::class, mappedBy: 'projet', cascade: ['persist', 'remove'], orphanRemoval: true)]
+    private Collection $ressources;
 
     public function __construct()
     {
@@ -61,7 +62,9 @@ class Projet
         ];
         $this->priceList = [];
         $this->invoices = [];
+        $this->ressources = new ArrayCollection();
     }
+
     public function getId(): ?int
     {
         return $this->id;
@@ -117,7 +120,6 @@ class Projet
         return $this;
     }
 
-
     public function setDeadlines(array $deadlines): self
     {
         $this->deadlines = $deadlines;
@@ -142,8 +144,6 @@ class Projet
         return $this;
     }
 
-
-
     public function isCompleted(): bool
     {
         return $this->isCompleted;
@@ -152,7 +152,6 @@ class Projet
     {
         $this->isCompleted = $isCompleted;
 
-        // Si on marque comme complété et qu'il n'y a pas de date de fin, on la définit
         if ($isCompleted && !$this->dateFinPrevue) {
             $this->dateFinPrevue = new \DateTime();
         }
@@ -194,7 +193,6 @@ class Projet
         if (isset($this->deadlines[$index])) {
             $this->deadlines[$index] = array_merge($this->deadlines[$index], $data);
 
-            // Si on met à jour la date réelle de la dernière étape, marquer le projet comme complété
             if ($index === count($this->deadlines) - 1 && isset($data['actual']) && $data['actual']) {
                 $this->setIsCompleted(true);
             }
@@ -203,14 +201,12 @@ class Projet
     }
 
     // Price list management
-
     public function getPriceList(): array
     {
         return $this->priceList ?? [];
     }
     public function addPriceListItem(array $item): self
     {
-        // Calculer le total si non fourni
         if (!isset($item['total']) && isset($item['quantity']) && isset($item['unitPrice'])) {
             $item['total'] = $item['quantity'] * $item['unitPrice'];
         }
@@ -220,7 +216,6 @@ class Projet
     public function updatePriceListItem(int $index, array $item): self
     {
         if (isset($this->priceList[$index])) {
-            // Recalculer le total si nécessaire
             if (isset($item['quantity']) || isset($item['unitPrice'])) {
                 $quantity = $item['quantity'] ?? $this->priceList[$index]['quantity'];
                 $unitPrice = $item['unitPrice'] ?? $this->priceList[$index]['unitPrice'];
@@ -241,11 +236,9 @@ class Projet
 
     public function calculateTotalPrice(): float
     {
-        // S'assurer que $this->priceList est toujours un tableau
         $priceList = $this->priceList ?? [];
 
         return array_reduce($priceList, function ($carry, $item) {
-            // Ajouter des vérifications pour éviter les erreurs
             $quantity = $item['quantity'] ?? 0;
             $unitPrice = $item['unitPrice'] ?? 0;
             $total = $item['total'] ?? ($quantity * $unitPrice);
@@ -279,21 +272,43 @@ class Projet
         }
         return $this;
     }
-    // src/Entity/Projet.php
 
-// Ajouter cette méthode pour corriger la sérialisation JSON
-public function __sleep()
-{
-    return ['id', 'nom', 'description', 'dateDebut', 'dateFinPrevue', 'isCompleted'];
-}
+    // Ressources management
+    public function getRessources(): Collection
+    {
+        return $this->ressources;
+    }
+
+    public function addRessource(Ressource $ressource): self
+    {
+        if (!$this->ressources->contains($ressource)) {
+            $this->ressources[] = $ressource;
+            $ressource->setProjet($this);
+        }
+        return $this;
+    }
+
+    public function removeRessource(Ressource $ressource): self
+    {
+        if ($this->ressources->removeElement($ressource)) {
+            if ($ressource->getProjet() === $this) {
+                $ressource->setProjet(null);
+            }
+        }
+        return $this;
+    }
+
     public function calculateTotalInvoiced(): float
     {
-        // S'assurer que $this->invoices est toujours un tableau
         $invoices = $this->invoices ?? [];
 
         return array_reduce($invoices, function ($carry, $invoice) {
-            // Ajouter des vérifications pour éviter les erreurs
             return $carry + ($invoice['amount'] ?? 0);
         }, 0);
+    }
+
+    public function __sleep()
+    {
+        return ['id', 'nom', 'description', 'dateDebut', 'dateFinPrevue', 'isCompleted'];
     }
 }

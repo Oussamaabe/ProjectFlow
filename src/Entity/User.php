@@ -44,6 +44,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(type: 'date', nullable: true)]
     private ?\DateTimeInterface $birthDate = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImage = null;
+
     #[ORM\Column(length: 10, nullable: true)]
     private ?string $gender = null;
 
@@ -193,4 +196,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         }
         return false;
     }
+    public function getProfileImage(): ?string
+{
+    return $this->profileImage;
+}
+
+public function setProfileImage(?string $profileImage): static
+{
+    $this->profileImage = $profileImage;
+    return $this;
+}
 }

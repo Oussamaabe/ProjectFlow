@@ -8,6 +8,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 
 class DocumentType extends AbstractType
 {
@@ -16,7 +17,7 @@ class DocumentType extends AbstractType
         $builder
             ->add('name', TextType::class, [
                 'label' => 'Nom du document',
-                'attr' => ['class' => 'form-control mb-2']
+                'attr' => ['class' => 'form-control']
             ])
             ->add('type', ChoiceType::class, [
                 'label' => 'Type',
@@ -26,7 +27,13 @@ class DocumentType extends AbstractType
                     'Rapport' => 'report',
                     'Autre' => 'other'
                 ],
-                'attr' => ['class' => 'form-select mb-2']
+                'attr' => ['class' => 'form-select']
+            ])
+            ->add('file', FileType::class, [
+                'label' => 'Fichier',
+                'required' => true,
+                'mapped' => false,
+                'attr' => ['class' => 'form-control']
             ]);
     }
 

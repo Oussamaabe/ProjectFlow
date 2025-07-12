@@ -15,59 +15,72 @@
         </div>
     </div>
 
-
-
-<!-- Section Délais -->
-<div class="card mb-4">
-    <div class="card-header bg-primary text-white">
-        <h5 class="mb-0">
-            <i class="fas fa-calendar-alt me-2"></i> Étapes du projet
-        </h5>
-    </div>
-    <div class="card-body">
-        {% for deadline in formatted.deadlines %}
-            <div class="mb-4 p-3 border rounded">
-                <h6>{{ deadline.name }}</h6>
-                <div class="row">
-                    <div class="col-md-3">
-                        <p><strong>Date prévue:</strong> {{ deadline.planned }}</p>
-                    </div>
-                    <div class="col-md-3">
-                        <p><strong>Date réelle:</strong> {{ deadline.actual }}</p>
-                    </div>
-                    <div class="col-md-3">
-                        <p><strong>Statut:</strong> 
-                            {% if deadline.status == 'planned' %}
-                                <span class="badge bg-info">Planifié</span>
-                            {% elseif deadline.status == 'in_progress' %}
-                                <span class="badge bg-primary">En cours</span>
-                            {% elseif deadline.status == 'completed' %}
-                                <span class="badge bg-success">Terminé</span>
-                            {% elseif deadline.status == 'delayed' %}
-                                <span class="badge bg-warning">En retard</span>
-                            {% else %}
-                                {{ deadline.status }}
-                            {% endif %}
-                        </p>
+    <!-- Section Délais -->
+    <div class="card mb-4">
+        <div class="card-header bg-primary text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-calendar-alt me-2"></i> Étapes du projet
+            </h5>
+            <a href="{{ path('app_projet_manage', {'id': projet.id}) }}" 
+               class="btn btn-sm btn-light">
+                <i class="fas fa-edit me-1"></i> Gérer les délais
+            </a>
+        </div>
+        <div class="card-body">
+            {% for deadline in formatted.deadlines %}
+                <div class="mb-4 p-3 border rounded">
+                    <h6>{{ deadline.name }}</h6>
+                    <div class="row">
+                        <div class="col-md-3">
+                            <p><strong>Date prévue:</strong> {{ deadline.planned }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p><strong>Date réelle:</strong> {{ deadline.actual }}</p>
+                        </div>
+                        <div class="col-md-3">
+                            <p><strong>Statut:</strong> 
+                                {% if deadline.status == 'planned' %}
+                                    <span class="badge bg-info">Planifié</span>
+                                {% elseif deadline.status == 'in_progress' %}
+                                    <span class="badge bg-primary">En cours</span>
+                                {% elseif deadline.status == 'completed' %}
+                                    <span class="badge bg-success">Terminé</span>
+                                {% elseif deadline.status == 'delayed' %}
+                                    <span class="badge bg-warning">En retard</span>
+                                {% else %}
+                                    {{ deadline.status }}
+                                {% endif %}
+                            </p>
+                        </div>
+                        <div class="col-md-3 text-end">
+                            <a href="{{ path('app_projet_manage', {
+                                'id': projet.id, 
+                                'tab': 'deadlines'
+                            }) }}" 
+                               class="btn btn-sm btn-outline-secondary">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                        </div>
                     </div>
                 </div>
-            </div>
-        {% else %}
-            <div class="alert alert-info">
-                Aucune étape définie pour ce projet
-            </div>
-        {% endfor %}
+            {% else %}
+                <div class="alert alert-info">
+                    Aucune étape définie pour ce projet
+                </div>
+            {% endfor %}
+        </div>
     </div>
-</div>
-
-<!-- ... autres sections ... -->
 
     <!-- Section Bordereau des prix -->
     <div class="card mb-4">
-        <div class="card-header bg-success text-white">
+        <div class="card-header bg-success text-white d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
                 <i class="fas fa-receipt me-2"></i> Bordereau des prix
             </h5>
+            <a href="{{ path('app_price_list_item_new', {'id': projet.id}) }}" 
+               class="btn btn-sm btn-light">
+                <i class="fas fa-plus me-1"></i> Ajouter élément
+            </a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -79,6 +92,7 @@
                             <th>Unité</th>
                             <th>Prix unitaire</th>
                             <th>Total</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -89,15 +103,25 @@
                                 <td>{{ item.unit }}</td>
                                 <td>{{ item.unitPrice }} €</td>
                                 <td>{{ item.total }} €</td>
+                                <td>
+                                    <a href="{{ path('app_projet_manage', {
+                                        'id': projet.id, 
+                                        'tab': 'prices'
+                                    }) }}" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="5" class="text-center">Aucun élément dans le bordereau</td>
+                                <td colspan="6" class="text-center">Aucun élément dans le bordereau</td>
                             </tr>
                         {% endfor %}
                         <tr class="table-primary">
                             <td colspan="4" class="text-end fw-bold">Total</td>
                             <td class="fw-bold">{{ totalPrice|number_format(2) }} €</td>
+                            <td></td>
                         </tr>
                     </tbody>
                 </table>
@@ -107,10 +131,14 @@
 
     <!-- Section Factures -->
     <div class="card mb-4">
-        <div class="card-header bg-warning text-dark">
+        <div class="card-header bg-warning text-dark d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
                 <i class="fas fa-file-invoice me-2"></i> Factures et décomptes
             </h5>
+            <a href="{{ path('app_invoice_new', {'id': projet.id}) }}" 
+               class="btn btn-sm btn-light">
+                <i class="fas fa-plus me-1"></i> Ajouter facture
+            </a>
         </div>
         <div class="card-body">
             <div class="table-responsive">
@@ -120,6 +148,7 @@
                             <th>Référence</th>
                             <th>Montant</th>
                             <th>Statut</th>
+                            <th>Actions</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -138,14 +167,23 @@
                                         {{ invoice.status }}
                                     {% endif %}
                                 </td>
+                                <td>
+                                    <a href="{{ path('app_projet_manage', {
+                                        'id': projet.id, 
+                                        'tab': 'invoices'
+                                    }) }}" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </td>
                             </tr>
                         {% else %}
                             <tr>
-                                <td colspan="3" class="text-center">Aucune facture enregistrée</td>
+                                <td colspan="4" class="text-center">Aucune facture enregistrée</td>
                             </tr>
                         {% endfor %}
                         <tr class="table-info">
-                            <td colspan="1" class="text-end fw-bold">Total facturé</td>
+                            <td colspan="2" class="text-end fw-bold">Total facturé</td>
                             <td class="fw-bold">{{ totalInvoiced|number_format(2) }} €</td>
                             <td></td>
                         </tr>
@@ -156,17 +194,21 @@
     </div>
 
     <!-- Section Documents -->
-    <div class="card">
-        <div class="card-header bg-secondary text-white">
+    <div class="card mb-4">
+        <div class="card-header bg-secondary text-white d-flex justify-content-between align-items-center">
             <h5 class="mb-0">
                 <i class="fas fa-file-alt me-2"></i> Documents du projet
             </h5>
+            <a href="{{ path('app_document_new', {'id': projet.id}) }}" 
+               class="btn btn-sm btn-light">
+                <i class="fas fa-plus me-1"></i> Ajouter document
+            </a>
         </div>
         <div class="card-body">
             <div class="row">
                 {% for document in formatted.documents %}
                     <div class="col-md-4 mb-3">
-                        <div class="card">
+                        <div class="card h-100">
                             <div class="card-body">
                                 <h6 class="card-title">{{ document.name }}</h6>
                                 <p class="card-text">
@@ -175,9 +217,22 @@
                                         Ajouté le: {{ document.date }}
                                     </small>
                                 </p>
-                                <a href="#" class="btn btn-sm btn-outline-primary">
-                                    <i class="fas fa-download me-1"></i> Télécharger
-                                </a>
+                                <div class="d-flex justify-content-between mt-auto">
+                                    <a href="{{ path('app_document_download', {
+                                        'id': projet.id, 
+                                        'index': loop.index0
+                                    }) }}" 
+                                       class="btn btn-sm btn-outline-primary">
+                                        <i class="fas fa-download me-1"></i> Télécharger
+                                    </a>
+                                    <a href="{{ path('app_projet_manage', {
+                                        'id': projet.id, 
+                                        'tab': 'documents'
+                                    }) }}" 
+                                       class="btn btn-sm btn-outline-secondary">
+                                        <i class="fas fa-edit"></i>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -187,6 +242,50 @@
                     </div>
                 {% endfor %}
             </div>
+        </div>
+    </div>
+
+    <!-- Section Ressources -->
+    <div class="card mt-4">
+        <div class="card-header bg-info text-white d-flex justify-content-between align-items-center">
+            <h5 class="mb-0">
+                <i class="fas fa-chart-bar me-2"></i> Suivi des ressources
+            </h5>
+            <a href="{{ path('app_suivi_ressources', {'id': projet.id}) }}" class="btn btn-light">
+                <i class="fas fa-tasks me-2"></i> Gérer les ressources
+            </a>
+        </div>
+        <div class="card-body">
+            {% if projet.ressources|length > 0 %}
+                <div class="table-responsive">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Nom</th>
+                                <th>Détails</th>
+                                <th>Coût unitaire</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ressource in projet.ressources %}
+                                <tr>
+                                    <td>{{ ressource.type }}</td>
+                                    <td>{{ ressource.nom }}</td>
+                                    <td>{{ ressource.getDetails() }}</td>
+                                    <td>{{ ressource.coutUnitaire|number_format(2) }} €</td>
+                                    <td>{{ ressource.getCoutTotal()|number_format(2) }} €</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% else %}
+                <div class="alert alert-info">
+                    Aucune ressource enregistrée pour ce projet
+                </div>
+            {% endif %}
         </div>
     </div>
 </div>

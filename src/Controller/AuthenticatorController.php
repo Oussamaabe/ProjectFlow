@@ -62,7 +62,7 @@ class AuthenticatorController extends AbstractController
             $totp = TOTP::createFromSecret($this->getUser()->getSecret());
             if ($totp->verify($request->request->get('otp'))) {
                 $request->getSession()->set('2fa_verified', true);
-                return $this->redirectToRoute('app_dashboard');
+                return $this->redirectToRoute('app_projet_statistiques');
             }
             $this->addFlash('error', 'Code OTP invalide');
         }
@@ -70,7 +70,7 @@ class AuthenticatorController extends AbstractController
         return $this->render('authenticator/verify.html.twig');
     }
 
-    #[Route('/dashboard', name: 'app_dashboard')]
+    #[Route('/dashboard', name: 'app_projet_statistiques')]
     public function dashboard(Request $request): Response
     {
         // Redirection si non connecté

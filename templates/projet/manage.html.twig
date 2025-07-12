@@ -1,5 +1,3 @@
-{# templates/projet/manage.html.twig #}
-
 {% extends 'base.html.twig' %}
 
 {% block title %}Gestion du Projet - {{ projet.nom }}{% endblock %}
@@ -19,6 +17,14 @@
                 locale: "fr"
             });
             
+            // Activer l'onglet depuis l'URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const activeTab = urlParams.get('tab') || 'deadlines';
+            const tabButton = document.querySelector(`#${activeTab}-tab`);
+            if (tabButton) {
+                new bootstrap.Tab(tabButton).show();
+            }
+
             // Gestion des collections
             document.querySelectorAll('.collection').forEach(collection => {
                 const addButton = document.createElement('button');
@@ -44,6 +50,36 @@
                 
                 collection.parentNode.appendChild(addButton);
             });
+
+            // Fonction pour ajouter un élément à une collection spécifique
+            function addCollectionItem(collectionName) {
+                const collection = document.querySelector(`.collection[data-collection="${collectionName}"]`);
+                if (!collection) return;
+                
+                const prototype = collection.dataset.prototype;
+                const index = collection.children.length;
+                const newItem = prototype.replace(/__name__/g, index);
+                
+                collection.insertAdjacentHTML('beforeend', newItem);
+                
+                // Réinitialiser les datepickers pour le nouvel élément
+                collection.querySelectorAll('.date-picker').forEach(picker => {
+                    flatpickr(picker, { dateFormat: "Y-m-d", allowInput: true, locale: "fr" });
+                });
+            }
+
+            // Boutons d'ajout spécifiques
+            document.querySelector('.add-document')?.addEventListener('click', () => {
+                addCollectionItem('documents');
+            });
+
+            document.querySelector('.add-invoice')?.addEventListener('click', () => {
+                addCollectionItem('invoices');
+            });
+
+            document.querySelector('.add-price-item')?.addEventListener('click', () => {
+                addCollectionItem('priceList');
+            });
         });
     </script>
 {% endblock %}
@@ -60,7 +96,7 @@
     {{ form_start(form) }}
         <ul class="nav nav-tabs mb-4" id="managementTabs" role="tablist">
             <li class="nav-item" role="presentation">
-                <button class="nav-link active" id="deadlines-tab" data-bs-toggle="tab" data-bs-target="#deadlines" type="button" role="tab">
+                <button class="nav-link" id="deadlines-tab" data-bs-toggle="tab" data-bs-target="#deadlines" type="button" role="tab">
                     <i class="fas fa-calendar-alt me-1"></i> Délais
                 </button>
             </li>
@@ -83,8 +119,8 @@
 
         <div class="tab-content" id="managementTabsContent">
             <!-- Délais -->
-            <div class="tab-pane fade show active" id="deadlines" role="tabpanel">
-                <div class="collection" data-prototype="{{ form_widget(form.deadlines.vars.prototype)|e('html_attr') }}">
+            <div class="tab-pane fade" id="deadlines" role="tabpanel">
+                <div class="collection" data-collection="deadlines" data-prototype="{{ form_widget(form.deadlines.vars.prototype)|e('html_attr') }}">
                     {% for deadline in form.deadlines %}
                         <div class="card mb-3">
                             <div class="card-body">
@@ -102,7 +138,12 @@
             
             <!-- Bordereau des Prix -->
             <div class="tab-pane fade" id="prices" role="tabpanel">
-                <div class="collection" data-prototype="{{ form_widget(form.priceList.vars.prototype)|e('html_attr') }}">
+                <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn btn-sm btn-primary add-price-item">
+                        <i class="fas fa-plus me-1"></i> Ajouter élément
+                    </button>
+                </div>
+                <div class="collection" data-collection="priceList" data-prototype="{{ form_widget(form.priceList.vars.prototype)|e('html_attr') }}">
                     {% for item in form.priceList %}
                         <div class="card mb-3">
                             <div class="card-body">
@@ -120,7 +161,12 @@
             
             <!-- Factures -->
             <div class="tab-pane fade" id="invoices" role="tabpanel">
-                <div class="collection" data-prototype="{{ form_widget(form.invoices.vars.prototype)|e('html_attr') }}">
+                <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn btn-sm btn-primary add-invoice">
+                        <i class="fas fa-plus me-1"></i> Ajouter facture
+                    </button>
+                </div>
+                <div class="collection" data-collection="invoices" data-prototype="{{ form_widget(form.invoices.vars.prototype)|e('html_attr') }}">
                     {% for invoice in form.invoices %}
                         <div class="card mb-3">
                             <div class="card-body">
@@ -137,12 +183,18 @@
             
             <!-- Documents -->
             <div class="tab-pane fade" id="documents" role="tabpanel">
-                <div class="collection" data-prototype="{{ form_widget(form.documents.vars.prototype)|e('html_attr') }}">
+                <div class="d-flex justify-content-end mb-3">
+                    <button type="button" class="btn btn-sm btn-primary add-document">
+                        <i class="fas fa-plus me-1"></i> Ajouter document
+                    </button>
+                </div>
+                <div class="collection" data-collection="documents" data-prototype="{{ form_widget(form.documents.vars.prototype)|e('html_attr') }}">
                     {% for document in form.documents %}
                         <div class="card mb-3">
                             <div class="card-body">
                                 {{ form_row(document.name) }}
                                 {{ form_row(document.type) }}
+                                {{ form_row(document.file) }}
                             </div>
                         </div>
                     {% else %}
@@ -153,7 +205,7 @@
         </div>
         
         <div class="mt-4">
-            {{ form_widget(form.save) }}
+            {{ form_widget(form.save, {'label': 'Enregistrer les modifications', 'attr': {'class': 'btn btn-primary'}}) }}
         </div>
     {{ form_end(form) }}
 </div>

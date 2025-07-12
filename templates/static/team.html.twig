@@ -1,0 +1,83 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Notre Équipe - ProjectFlow{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <h1 class="text-center mb-5">Rencontrez notre équipe</h1>
+    
+    <div class="row justify-content-center">
+        <div class="col-lg-8 text-center mb-5">
+            <p class="lead">Une équipe passionnée dédiée à révolutionner la gestion de projets</p>
+        </div>
+    </div>
+    
+    <div class="row">
+        <div class="col-md-6 mb-5">
+            <div class="team-member card h-100 border-0 shadow">
+                <div class="card-body p-4 text-center">
+                    <img src="https://ui-avatars.com/api/?name=Oussama+Belfakir&size=200&background=0D8ABC&color=fff" 
+                         alt="Oussama Belfakir" class="rounded-circle mb-4" style="width: 150px; height: 150px;">
+                    <h3>Oussama Belfakir</h3>
+                    <h5 class="text-primary mb-3">Développeur Full-Stack</h5>
+                    <p class="mb-4">
+                        Expert en Symfony et React avec 5 ans d'expérience dans le développement d'applications web complexes.
+                        Passionné par la création de solutions techniques élégantes et performantes.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fab fa-github"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-6 mb-5">
+            <div class="team-member card h-100 border-0 shadow">
+                <div class="card-body p-4 text-center">
+                    <img src="https://ui-avatars.com/api/?name=Aimrane+Zaroual&size=200&background=0D8ABC&color=fff" 
+                         alt="Aimrane Zaroual" class="rounded-circle mb-4" style="width: 150px; height: 150px;">
+                    <h3>Aimrane Zaroual</h3>
+                    <h5 class="text-primary mb-3">Designer UX/UI</h5>
+                    <p class="mb-4">
+                        Spécialiste en design d'interface et expérience utilisateur avec une approche centrée sur l'humain.
+                        Transforme des idées complexes en interfaces intuitives et esthétiques.
+                    </p>
+                    <div class="social-links">
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fab fa-linkedin"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-sm me-2">
+                            <i class="fab fa-dribbble"></i>
+                        </a>
+                        <a href="#" class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-envelope"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row mt-5">
+        <div class="col-lg-8 mx-auto">
+            <div class="card bg-light border-0">
+                <div class="card-body p-5 text-center">
+                    <h2 class="mb-4">Rejoignez notre équipe</h2>
+                    <p class="lead mb-4">Nous recherchons des talents passionnés pour nous aider à construire l'avenir de la gestion de projet</p>
+                    <a href="{{ path('app_contact') }}" class="btn btn-outline-primary">
+                        <i class="fas fa-briefcase me-2"></i>Voir les offres d'emploi
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,270 +1,237 @@
-{# templates/dashboard/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Dashboard - ProjectFlow{% endblock %}
+{% block title %}Dashboard{% endblock %}
 
 {% block body %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold">Tableau de Bord</h1>
-        <div class="d-flex">
-            <button class="btn btn-primary me-2">
-                <i class="fas fa-plus me-2"></i>Nouveau Projet
-            </button>
-            <div class="dropdown">
-                <button class="btn btn-outline-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">
-                    <i class="fas fa-filter me-2"></i>Filtrer
-                </button>
-                <ul class="dropdown-menu">
-                    <li><a class="dropdown-item" href="#">Ce mois</a></li>
-                    <li><a class="dropdown-item" href="#">Ce trimestre</a></li>
-                    <li><a class="dropdown-item" href="#">Cette année</a></li>
-                </ul>
-            </div>
-        </div>
+        <h1>Dashboard</h1>
+       
     </div>
-    
+
+    <!-- Cartes de synthèse -->
     <div class="row mb-4">
-        <div class="col-md-3">
-            <div class="card dashboard-card">
-                <div class="card-body stat-card">
-                    <div class="stat-number">12</div>
-                    <div class="stat-label">Projets en cours</div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0">Total Projets</h5>
+                </div>
+                <div class="card-body">
+                    <div class="stat-number">{{ totalProjets }}</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card dashboard-card">
-                <div class="card-body stat-card">
-                    <div class="stat-number">5</div>
-                    <div class="stat-label">Affaires ouvertes</div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-header bg-success text-white">
+                    <h5 class="mb-0">Projets Terminés</h5>
+                </div>
+                <div class="card-body">
+                    <div class="stat-number">{{ projetsTermines }}</div>
                 </div>
             </div>
         </div>
-        <div class="col-md-3">
-            <div class="card dashboard-card">
-                <div class="card-body stat-card">
-                    <div class="stat-number">3</div>
-                    <div class="stat-label">Échéances cette semaine</div>
+        <div class="col-md-4">
+            <div class="card text-center">
+                <div class="card-header bg-warning text-dark">
+                    <h5 class="mb-0">Projets en Cours</h5>
                 </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card dashboard-card">
-                <div class="card-body stat-card">
-                    <div class="stat-number">18</div>
-                    <div class="stat-label">Tâches à faire</div>
+                <div class="card-body">
+                    <div class="stat-number">{{ projetsEnCours }}</div>
                 </div>
             </div>
         </div>
     </div>
-    
-    <div class="row">
-        <div class="col-md-8">
+
+    <!-- Graphiques -->
+    <div class="row mb-4">
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header d-flex justify-content-between align-items-center">
-                    <span><i class="fas fa-chart-bar me-2"></i>Progression des Projets</span>
-                    <select class="form-select form-select-sm w-auto">
-                        <option>Ce mois</option>
-                        <option>Ce trimestre</option>
-                        <option>Cette année</option>
-                    </select>
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0">Répartition des Statuts</h5>
                 </div>
                 <div class="card-body">
-                    <canvas id="projectChart" height="250"></canvas>
+                    <div class="chart-pie">
+                        <canvas id="statusChart"></canvas>
+                    </div>
                 </div>
             </div>
-            
-            <div class="card mt-4">
-                <div class="card-header">
-                    <i class="fas fa-list-check me-2"></i>Dernières Tâches
+        </div>
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-header bg-purple text-white">
+                    <h5 class="mb-0">Évolution Mensuelle</h5>
                 </div>
                 <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th>Tâche</th>
-                                    <th>Projet</th>
-                                    <th>Échéance</th>
-                                    <th>Statut</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>Rédiger cahier des charges</td>
-                                    <td>Site E-commerce</td>
-                                    <td>15/06/2023</td>
-                                    <td><span class="badge bg-warning">En cours</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Validation maquette UX</td>
-                                    <td>Application Mobile</td>
-                                    <td>18/06/2023</td>
-                                    <td><span class="badge bg-info">À faire</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Réunion client final</td>
-                                    <td>Refonte CRM</td>
-                                    <td>20/06/2023</td>
-                                    <td><span class="badge bg-info">À faire</span></td>
-                                </tr>
-                                <tr>
-                                    <td>Livraison phase 1</td>
-                                    <td>ERP Custom</td>
-                                    <td>12/06/2023</td>
-                                    <td><span class="badge bg-success">Terminé</span></td>
-                                </tr>
-                            </tbody>
-                        </table>
+                    <div class="chart-area">
+                        <canvas id="monthlyChart"></canvas>
                     </div>
-                    <a href="#" class="btn btn-sm btn-outline-primary">Voir toutes les tâches</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Autres statistiques -->
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card mb-4">
+                <div class="card-header bg-secondary text-white">
+                    <h5 class="mb-0">Délai Moyen de Réalisation</h5>
+                </div>
+                <div class="card-body text-center">
+                    <div class="stat-number">{{ averageCompletionTime ?? 'N/A' }}</div>
                 </div>
             </div>
         </div>
         
-        <div class="col-md-4">
+        <div class="col-md-6">
             <div class="card">
-                <div class="card-header">
-                    <i class="fas fa-bell me-2"></i>Activités Récents
+                <div class="card-header bg-dark text-white">
+                    <h5 class="mb-0">Top 5 Projets par Budget</h5>
                 </div>
                 <div class="card-body">
-                    <div class="activity-item">
-                        <div class="d-flex justify-content-between">
-                            <strong>Ahmed Ali</strong>
-                            <small class="text-muted">Il y a 2 heures</small>
-                        </div>
-                        <p class="mb-0">A terminé la tâche "Intégration frontend"</p>
-                        <small class="text-muted">Projet: Site E-commerce</small>
+                    <div class="table-responsive">
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Projet</th>
+                                    <th>Budget Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for projet in topBudgetProjects %}
+                                    <tr>
+                                        <td>
+                                            <a href="{{ path('app_projet_show', {'id': projet.id}) }}">
+                                                {{ projet.nom }}
+                                            </a>
+                                        </td>
+                                        <td>{{ projet.total_budget is defined ? projet.total_budget|number_format(2) : '0.00' }} €</td>
+                                    </tr>
+                                {% else %}
+                                    <tr>
+                                        <td colspan="2">Aucun projet trouvé</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
                     </div>
-                    
-                    <div class="activity-item">
-                        <div class="d-flex justify-content-between">
-                            <strong>Fatima Zahra</strong>
-                            <small class="text-muted">Il y a 5 heures</small>
-                        </div>
-                        <p class="mb-0">A ajouté un nouveau document au projet "ERP Custom"</p>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="d-flex justify-content-between">
-                            <strong>Karim Benjelloun</strong>
-                            <small class="text-muted">Hier</small>
-                        </div>
-                        <p class="mb-0">A changé le statut de l'affaire "Contrat X" à "Adjudicataire"</p>
-                    </div>
-                    
-                    <div class="activity-item">
-                        <div class="d-flex justify-content-between">
-                            <strong>Système</strong>
-                            <small class="text-muted">Hier</small>
-                        </div>
-                        <p class="mb-0">Projet créé automatiquement pour l'affaire "Contrat X"</p>
-                    </div>
-                    
-                    <a href="#" class="btn btn-sm btn-outline-primary mt-2">Voir toutes les activités</a>
-                </div>
-            </div>
-            
-            <div class="card mt-4">
-                <div class="card-header">
-                    <i class="fas fa-rocket me-2"></i>Projets en Vedette
-                </div>
-                <div class="card-body">
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-shrink-0">
-                            <div class="bg-primary text-white rounded-circle p-3">
-                                <i class="fas fa-shopping-cart"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-0">Site E-commerce</h6>
-                            <small class="text-muted">Client: ABC Distribution</small>
-                            <div class="progress mt-2" style="height: 6px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 65%;" aria-valuenow="65" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex align-items-center mb-3">
-                        <div class="flex-shrink-0">
-                            <div class="bg-info text-white rounded-circle p-3">
-                                <i class="fas fa-mobile-alt"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-0">Application Mobile</h6>
-                            <small class="text-muted">Client: XYZ Services</small>
-                            <div class="progress mt-2" style="height: 6px;">
-                                <div class="progress-bar bg-warning" role="progressbar" style="width: 40%;" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="d-flex align-items-center">
-                        <div class="flex-shrink-0">
-                            <div class="bg-warning text-white rounded-circle p-3">
-                                <i class="fas fa-cogs"></i>
-                            </div>
-                        </div>
-                        <div class="flex-grow-1 ms-3">
-                            <h6 class="mb-0">ERP Custom</h6>
-                            <small class="text-muted">Client: Industries Maroc</small>
-                            <div class="progress mt-2" style="height: 6px;">
-                                <div class="progress-bar bg-success" role="progressbar" style="width: 85%;" aria-valuenow="85" aria-valuemin="0" aria-valuemax="100"></div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <a href="{{ path('app_affaire_index') }}" class="btn btn-sm btn-outline-primary mt-3">Voir tous les projets</a>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    const ctx = document.getElementById('projectChart').getContext('2d');
-    const chart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ['Site E-commerce', 'Application Mobile', 'Refonte CRM', 'ERP Custom', 'Portail Client'],
-            datasets: [{
-                label: 'Progression (%)',
-                data: [65, 40, 30, 85, 50],
-                backgroundColor: [
-                    'rgba(67, 97, 238, 0.7)',
-                    'rgba(76, 201, 240, 0.7)',
-                    'rgba(247, 37, 133, 0.7)',
-                    'rgba(29, 53, 87, 0.7)',
-                    'rgba(111, 99, 236, 0.7)'
-                ],
-                borderColor: [
-                    'rgba(67, 97, 238, 1)',
-                    'rgba(76, 201, 240, 1)',
-                    'rgba(247, 37, 133, 1)',
-                    'rgba(29, 53, 87, 1)',
-                    'rgba(111, 99, 236, 1)'
-                ],
-                borderWidth: 1
-            }]
-        },
-        options: {
-            responsive: true,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    max: 100,
-                    ticks: {
-                        callback: function(value) {
-                            return value + '%';
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Graphique de répartition des statuts
+            const statusCtx = document.getElementById('statusChart').getContext('2d');
+            const statusChart = new Chart(statusCtx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['En cours', 'Terminés'],
+                    datasets: [{
+                        data: [{{ projetsEnCours }}, {{ projetsTermines }}],
+                        backgroundColor: ['#4e73df', '#1cc88a'],
+                        hoverBackgroundColor: ['#2e59d9', '#17a673'],
+                        hoverBorderColor: "rgba(234, 236, 244, 1)",
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            position: 'bottom'
+                        },
+                        tooltip: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            padding: 15,
+                            displayColors: false,
+                            callbacks: {
+                                label: function(tooltipItem, data) {
+                                    const dataset = data.datasets[tooltipItem.datasetIndex];
+                                    const value = dataset.data[tooltipItem.index];
+                                    const label = data.labels[tooltipItem.index];
+                                    return `${label}: ${value} projets`;
+                                }
+                            }
                         }
                     }
                 }
-            }
-        }
-    });
-});
-</script>
+            });
+
+            // Graphique d'évolution mensuelle
+            const monthlyCtx = document.getElementById('monthlyChart').getContext('2d');
+            const monthlyChart = new Chart(monthlyCtx, {
+                type: 'line',
+                data: {
+                    labels: {{ monthlyLabels|json_encode|raw }},
+                    datasets: [{
+                        label: "Nouveaux projets",
+                        lineTension: 0.3,
+                        backgroundColor: "rgba(78, 115, 223, 0.05)",
+                        borderColor: "rgba(78, 115, 223, 1)",
+                        pointRadius: 3,
+                        pointBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHoverRadius: 3,
+                        pointHoverBackgroundColor: "rgba(78, 115, 223, 1)",
+                        pointHoverBorderColor: "rgba(78, 115, 223, 1)",
+                        pointHitRadius: 10,
+                        pointBorderWidth: 2,
+                        data: {{ monthlyCounts|json_encode|raw }},
+                    }]
+                },
+                options: {
+                    maintainAspectRatio: false,
+                    scales: {
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                beginAtZero: true,
+                                precision: 0
+                            }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            backgroundColor: "rgb(255,255,255)",
+                            bodyFontColor: "#858796",
+                            borderColor: '#dddfeb',
+                            borderWidth: 1,
+                            padding: 15,
+                            displayColors: false
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+{% endblock %}
+
+<style>
+    .bg-purple {
+        background: linear-gradient(to right, #6f42c1, #a370f7);
+    }
+    .chart-area {
+        position: relative;
+        height: 20rem;
+    }
+    .chart-pie {
+        position: relative;
+        height: 15rem;
+    }
+</style>
 {% endblock %}

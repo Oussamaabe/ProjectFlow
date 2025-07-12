@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}À propos - ProjectFlow{% endblock %}
+
+{% block body %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-8 mx-auto">
+            <div class="card shadow">
+                <div class="card-body p-5">
+                    <h1 class="text-center mb-4">À propos de ProjectFlow</h1>
+                    
+                    <div class="text-center mb-5">
+                        <img src="{{ asset('images/about.jpg') }}" alt="Équipe ProjectFlow" class="img-fluid rounded" style="max-height: 400px;">
+                    </div>
+                    
+                    <h2 class="mb-3">Notre Mission</h2>
+                    <p class="lead">
+                        ProjectFlow a été créé pour simplifier la gestion de projets et d'affaires pour les entreprises de toutes tailles.
+                    </p>
+                    <p>
+                        Notre plateforme offre des outils puissants pour planifier, suivre et analyser vos projets en temps réel.
+                        Que vous soyez une petite équipe ou une grande entreprise, ProjectFlow s'adapte à vos besoins.
+                    </p>
+                    
+                    <h2 class="mt-5 mb-3">Notre Histoire</h2>
+                    <p>
+                        Fondé en 2023 par une équipe passionnée de développeurs et designers, ProjectFlow est né du constat que la gestion de projet est souvent compliquée et chronophage.
+                    </p>
+                    <p>
+                        Nous avons conçu une solution intuitive qui permet de gagner du temps et d'augmenter la productivité de votre équipe.
+                    </p>
+                    
+                    <h2 class="mt-5 mb-3">Nos Valeurs</h2>
+                    <div class="row">
+                        <div class="col-md-6 mb-4">
+                            <div class="feature-box">
+                                <i class="fas fa-lightbulb fa-2x text-primary mb-3"></i>
+                                <h4>Innovation</h4>
+                                <p>Nous repoussons constamment les limites pour vous offrir des fonctionnalités innovantes.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="feature-box">
+                                <i class="fas fa-handshake fa-2x text-primary mb-3"></i>
+                                <h4>Collaboration</h4>
+                                <p>Nous croyons en la puissance du travail d'équipe et facilitons la collaboration.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="feature-box">
+                                <i class="fas fa-lock fa-2x text-primary mb-3"></i>
+                                <h4>Sécurité</h4>
+                                <p>Vos données sont protégées avec les meilleures pratiques de sécurité.</p>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="feature-box">
+                                <i class="fas fa-users fa-2x text-primary mb-3"></i>
+                                <h4>Accessibilité</h4>
+                                <p>Une plateforme conçue pour être utilisée par tous, sans courbe d'apprentissage abrupte.</p>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="text-center mt-5">
+                        <a href="{{ path('app_contact') }}" class="btn btn-primary btn-lg">
+                            <i class="fas fa-envelope me-2"></i>Nous contacter
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
