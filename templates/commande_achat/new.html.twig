@@ -1,0 +1,69 @@
+{# templates/commande_achat/new.html.twig #}
+
+{{ form_start(form) }}
+
+    {{ form_row(form.numero) }}
+    {{ form_row(form.dateCommande) }}
+    {{ form_row(form.statut) }}
+    {{ form_row(form.fournisseur) }}
+
+    <h4>Lignes de commande</h4>
+    <ul id="lignes-list" data-prototype="{{ form_widget(form.lignes.vars.prototype)|e('html_attr') }}">
+        {% for ligneForm in form.lignes %}
+            <li>
+                {{ form_row(ligneForm) }}
+                <button type="button" class="remove-ligne">Supprimer</button>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <button type="button" id="add-ligne">Ajouter une ligne</button>
+
+    <button type="submit">Enregistrer</button>
+
+{{ form_end(form) }}
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const collectionHolder = document.getElementById('lignes-list');
+    const addButton = document.getElementById('add-ligne');
+
+    // Setup an index based on existing inputs
+    let index = collectionHolder.querySelectorAll('li').length;
+
+    addButton.addEventListener('click', () => {
+        // Get the prototype explained in data attribute
+        const prototype = collectionHolder.dataset.prototype;
+
+        // Replace '__name__' in the prototype HTML with the index
+        const newForm = prototype.replace(/__name__/g, index);
+
+        // Create a new list item and insert the form inside
+        const li = document.createElement('li');
+        li.innerHTML = newForm;
+
+        // Add a remove button
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.innerText = 'Supprimer';
+        removeButton.classList.add('remove-ligne');
+        li.appendChild(removeButton);
+
+        collectionHolder.appendChild(li);
+
+        // Add event listener to remove button
+        removeButton.addEventListener('click', () => {
+            li.remove();
+        });
+
+        index++;
+    });
+
+    // Add remove button event listeners for existing items
+    collectionHolder.querySelectorAll('.remove-ligne').forEach(button => {
+        button.addEventListener('click', (e) => {
+            e.target.closest('li').remove();
+        });
+    });
+});
+</script>

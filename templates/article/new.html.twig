@@ -1,0 +1,10 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}New Article{% endblock %}
+
+{% block body %}
+
+    {{ include('article/_form.html.twig') }}
+
+    <a href="{{ path('app_article_index') }}">Retourner vers la liste</a>
+{% endblock %}

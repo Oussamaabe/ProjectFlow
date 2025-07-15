@@ -1,0 +1,85 @@
+{# templates/article/_form.html.twig #}
+
+{{ form_start(form, {'attr': {'class': 'container mt-5 article-form'} }) }}
+    <div class="row mb-4">
+        <h2 class="mb-4">{{ form_title|default('Create new Article') }}</h2>
+        
+        {# First Column #}
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.reference, 'Référence', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.reference, {'attr': {'class': 'form-control form-control-lg', 'placeholder': 'Entrer la référence'}}) }}
+                {{ form_errors(form.reference) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.designation, 'Designation', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.designation, {'attr': {'class': 'form-control', 'placeholder': 'Entrer la designation'}}) }}
+                {{ form_errors(form.designation) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.prixUnitaire, 'Prix unitaire', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                <div class="input-group">
+                    <span class="input-group-text">MAD</span>
+                    {{ form_widget(form.prixUnitaire, {'attr': {'class': 'form-control', 'placeholder': '0.00'}}) }}
+                </div>
+                {{ form_errors(form.prixUnitaire) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.uniteMesure, 'Unité de mesure', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.uniteMesure, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.uniteMesure) }}
+            </div>
+        </div>
+
+        {# Second Column #}
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.description, 'Description', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.description, {'attr': {'class': 'form-control', 'rows': 3, 'placeholder': ''}}) }}
+                {{ form_errors(form.description) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.categorie, 'Categorie', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.categorie, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.categorie) }}
+            </div>
+
+            <div class="mb-3">
+                {{ form_label(form.tva, 'Taux De TVA', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                <div class="input-group">
+                    {{ form_widget(form.tva, {'attr': {'class': 'form-control', 'placeholder': '20'}}) }}
+                    <span class="input-group-text">%</span>
+                </div>
+                {{ form_errors(form.tva) }}
+            </div>
+
+            <div class="mb-3 form-check form-switch">
+                {{ form_widget(form.actif, {'attr': {'class': 'form-check-input'}}) }}
+                {{ form_label(form.actif, 'Active', {'label_attr': {'class': 'form-check-label fw-bold'}}) }}
+                {{ form_errors(form.actif) }}
+            </div>
+        </div>
+    </div>
+
+    {# Bottom Row #}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="mb-3">
+                {{ form_label(form.fournisseur, 'Fournisseur
+', {'label_attr': {'class': 'form-label fw-bold'}}) }}
+                {{ form_widget(form.fournisseur, {'attr': {'class': 'form-select'}}) }}
+                {{ form_errors(form.fournisseur) }}
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="d-flex justify-content-end gap-3 mt-3">
+                <a href="{{ path('app_article_index') }}" class="btn btn-outline-secondary">Cancel</a>
+                <button class="btn btn-primary">{{ button_label|default('Save') }}</button>
+            </div>
+        </div>
+    </div>
+{{ form_end(form) }}

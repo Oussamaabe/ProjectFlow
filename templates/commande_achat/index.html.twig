@@ -1,0 +1,63 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Liste des commandes d'achat{% endblock %}
+
+{% block body %}
+    <h1 class="mb-4">📦 Commandes d’achat</h1>
+
+    <a href="{{ path('app_commande_achat_new') }}" class="btn btn-primary mb-3">
+        ➕ Nouvelle commande
+    </a>
+
+    <table class="table table-hover table-striped align-middle">
+        <thead class="table-dark">
+            <tr>
+                <th>#</th>
+                <th>Numéro</th>
+                <th>Date</th>
+                <th>Statut</th>
+                <th>Total</th>
+                <th class="text-end">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for commande_achat in commande_achats %}
+            <tr>
+                <td>{{ commande_achat.id }}</td>
+                <td>{{ commande_achat.numero }}</td>
+                <td>{{ commande_achat.dateCommande ? commande_achat.dateCommande|date('d/m/Y') : '' }}</td>
+                <td>
+                    {% if commande_achat.statut == 'réceptionnée' %}
+                        <span class="badge bg-success">Réceptionnée</span>
+                    {% elseif commande_achat.statut == 'envoyée' %}
+                        <span class="badge bg-warning text-dark">Envoyée</span>
+                    {% else %}
+                        <span class="badge bg-secondary">Brouillon</span>
+                    {% endif %}
+                </td>
+                <td>{{ commande_achat.total|number_format(2, ',', ' ') }} MAD</td>
+                <td class="text-end">
+                    <a href="{{ path('app_commande_achat_show', {'id': commande_achat.id}) }}" class="btn btn-sm btn-outline-secondary">
+                        🔍
+                    </a>
+                    <a href="{{ path('app_commande_achat_edit', {'id': commande_achat.id}) }}" class="btn btn-sm btn-outline-primary">
+                        ✏️
+                    </a>
+
+                    {% if commande_achat.statut != 'réceptionnée' %}
+                        <a href="{{ path('commande_achat_receptionner', {'id': commande_achat.id}) }}"
+                           class="btn btn-sm btn-success"
+                           onclick="return confirm('Confirmer la réception de cette commande ?');">
+                            ✅ Réceptionner
+                        </a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="6" class="text-center">Aucune commande enregistrée.</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
