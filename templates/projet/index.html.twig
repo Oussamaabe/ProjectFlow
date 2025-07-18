@@ -5,17 +5,17 @@
 {% block title %}Gestion des Projets{% endblock %}
 
 {% block body %}
-<div class="container mt-4">
+<div class="container mt-4" style="color: var(--text-color);">
     <h1>Gestion des Projets</h1>
     
-    <ul class="nav nav-tabs mb-4" id="projectTabs" role="tablist">
+    <ul class="nav nav-tabs mb-4" id="projectTabs" role="tablist" >
         <li class="nav-item" role="presentation">
             <button class="nav-link active" id="ongoing-tab" data-bs-toggle="tab" data-bs-target="#ongoing" type="button" role="tab">
                 Projets en Cours
             </button>
         </li>
-        <li class="nav-item" role="presentation">
-            <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab">
+        <li class="nav-item" role="presentation" >
+            <button class="nav-link" id="completed-tab" data-bs-toggle="tab" data-bs-target="#completed" type="button" role="tab" >
                 Projets Achevés
             </button>
         </li>
@@ -31,15 +31,15 @@
                                 <h5 class="mb-0">{{ projet.nom }}</h5>
                             </div>
                             <div class="card-body">
-                                <div class="d-flex justify-content-between mb-2">
-                                    <span><strong>Date début:</strong> {{ projet.dateDebut|date('d/m/Y') }}</span>
+                                <div class="d-flex justify-content-between mb-2" >
+                                    <span style="color: var(--text-color);"><strong>Date début:</strong> {{ projet.dateDebut|date('d/m/Y') }}</span>
                                     {% if projet.dateFinPrevue %}
-                                        <span><strong>Fin prévue:</strong> {{ projet.dateFinPrevue|date('d/m/Y') }}</span>
+                                        <span style="color: var(--text-color);"><strong>Fin prévue:</strong> {{ projet.dateFinPrevue|date('d/m/Y') }}</span>
                                     {% endif %}
                                 </div>
                                 
                                 <div class="mb-3">
-                                    <strong>Affaire associée:</strong>
+                                    <strong style="color: var(--text-color);">Affaire associée:</strong>
                                     {% if projet.affaire %}
                                         <a href="{{ path('app_affaire_show', {'id': projet.affaire.id}) }}">
                                             {{ projet.affaire.titre }}

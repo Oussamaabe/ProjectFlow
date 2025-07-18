@@ -1,49 +1,82 @@
+{# fournisseur/index.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Fournisseur index{% endblock %}
+{% block title %}Liste des fournisseurs{% endblock %}
 
 {% block body %}
-    <h1>Fournisseur index</h1>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>
+                <i class="fas fa-truck me-2"></i>
+                Fournisseurs
+            </h1>
+            <a href="{{ path('app_fournisseur_new') }}" class="btn btn-primary">
+                <i class="fas fa-plus me-1"></i> Nouveau fournisseur
+            </a>
+        </div>
 
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Id</th>
-                <th>Nom</th>
-                <th>Email</th>
-                <th>Telephone</th>
-                <th>Adresse</th>
-                <th>Pays</th>
-                <th>IdentifiantFiscal</th>
-                <th>DateCreation</th>
-                <th>Actif</th>
-                <th>actions</th>
-            </tr>
-        </thead>
-        <tbody>
-        {% for fournisseur in fournisseurs %}
-            <tr>
-                <td>{{ fournisseur.id }}</td>
-                <td>{{ fournisseur.nom }}</td>
-                <td>{{ fournisseur.email }}</td>
-                <td>{{ fournisseur.telephone }}</td>
-                <td>{{ fournisseur.adresse }}</td>
-                <td>{{ fournisseur.pays }}</td>
-                <td>{{ fournisseur.identifiantFiscal }}</td>
-                <td>{{ fournisseur.dateCreation ? fournisseur.dateCreation|date('Y-m-d H:i:s') : '' }}</td>
-                <td>{{ fournisseur.actif ? 'Yes' : 'No' }}</td>
-                <td>
-                    <a href="{{ path('app_fournisseur_show', {'id': fournisseur.id}) }}">show</a>
-                    <a href="{{ path('app_fournisseur_edit', {'id': fournisseur.id}) }}">edit</a>
-                </td>
-            </tr>
-        {% else %}
-            <tr>
-                <td colspan="10">no records found</td>
-            </tr>
-        {% endfor %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_fournisseur_new') }}">Create new</a>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Nom</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Pays</th>
+                                <th>Statut</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        {% for fournisseur in fournisseurs %}
+                            <tr>
+                                <td>{{ fournisseur.nom }}</td>
+                                <td>{{ fournisseur.email }}</td>
+                                <td>{{ fournisseur.telephone }}</td>
+                                <td>{{ fournisseur.pays }}</td>
+                                <td>
+                                    {% if fournisseur.actif %}
+                                        <span class="badge bg-success">Actif</span>
+                                    {% else %}
+                                        <span class="badge bg-danger">Inactif</span>
+                                    {% endif %}
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a href="{{ path('app_fournisseur_show', {'id': fournisseur.id}) }}" 
+                                           class="btn btn-sm btn-outline-info" title="Voir">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ path('app_fournisseur_edit', {'id': fournisseur.id}) }}" 
+                                           class="btn btn-sm btn-outline-primary" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        <form method="post" 
+                                              action="{{ path('app_fournisseur_delete', {'id': fournisseur.id}) }}" 
+                                              class="d-inline"
+                                              onsubmit="confirmDelete(event, 'Êtes-vous sûr de vouloir supprimer ce fournisseur ?');">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ fournisseur.id) }}">
+                                            <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                <i class="fas fa-trash"></i>
+                                            </button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                        {% else %}
+                            <tr>
+                                <td colspan="6" class="text-center py-5">
+                                    <i class="fas fa-truck fa-3x text-muted mb-3"></i>
+                                    <h4 class="text-muted">Aucun fournisseur enregistré</h4>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

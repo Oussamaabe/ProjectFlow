@@ -13,11 +13,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 128 128%22><text y=%221.2em%22 font-size=%2296%22>📊</text></svg>">
     <style>
-        .scrollable-table {
-            max-height: 400px;
-            overflow-y: auto;
-        }
-        
+
         /* Variables pour le mode clair */
         :root {
             --primary: #4361ee;
@@ -83,13 +79,11 @@
         }
 
         .nav-link {
-            color: rgba(255, 255, 255, 0.85) !important;
             transition: all 0.3s;
             font-weight: 500;
         }
 
         .nav-link:hover {
-            color: white !important;
             transform: translateY(-2px);
         }
 
@@ -175,17 +169,7 @@
             border-radius: 0.25rem;
         }
         
-        .chart-area {
-            position: relative;
-            height: 20rem;
-            width: 100%;
-        }
 
-        .chart-pie {
-            position: relative;
-            height: 15rem;
-            width: 100%;
-        }
         
         /* Sidebar Styles */
         .sidebar {
@@ -200,8 +184,11 @@
             transition: all 0.3s, background-color 0.3s;
             overflow-y: auto;
             box-shadow: 3px 0 10px rgba(0,0,0,0.1);
+            
         }
-        
+        .tgl{
+            margin:50px 30px 0px 0px;
+        }
         .sidebar-brand {
             padding: 1.5rem 1rem;
             border-bottom: 1px solid var(--border-color);
@@ -209,6 +196,7 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            position: relative;
         }
         
         .sidebar-nav {
@@ -235,11 +223,20 @@
             text-align: center;
         }
         
+        /* Nouvelle approche pour le contenu principal */
         .main-content {
-            margin-left: 250px;
             padding: 20px;
             transition: all 0.3s;
             flex: 1;
+        }
+        
+        /* Appliquer le décalage uniquement pour les pages authentifiées */
+        .sidebar:not(.collapsed) ~ .main-content {
+            margin-left: 250px;
+        }
+        
+        .sidebar.collapsed ~ .main-content {
+            margin-left: 70px;
         }
         
         .sidebar.collapsed {
@@ -265,16 +262,8 @@
             font-size: 1.2rem;
         }
         
-        .main-content.expanded {
-            margin-left: 70px;
-        }
-        
-        .sidebar-toggle {
-            background: none;
-            border: none;
-            color: white;
-            font-size: 1.2rem;
-            cursor: pointer;
+        .mobile-navbar {
+            display: none;
         }
         
         @media (max-width: 992px) {
@@ -286,17 +275,14 @@
                 transform: translateX(0);
             }
             
-            .main-content {
+            .sidebar ~ .main-content,
+            .sidebar.collapsed ~ .main-content {
                 margin-left: 0;
             }
             
             .mobile-toggle {
                 display: block;
             }
-        }
-        
-        .mobile-navbar {
-            display: none;
         }
         
         @media (max-width: 992px) {
@@ -332,53 +318,18 @@
                 margin-bottom: 5px;
             }
         }
-        
-        /* Static pages styling */
-        .team-member {
-            text-align: center;
-            margin-bottom: 2rem;
-        }
-        
-        .team-member img {
-            width: 150px;
-            height: 150px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 3px solid var(--primary);
-            margin: 0 auto 1rem;
-        }
-        
-        .feature-box {
-            text-align: center;
-            padding: 2rem;
-            border-radius: 10px;
-            background: var(--card-bg);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.05);
-            margin-bottom: 2rem;
-            height: 100%;
-            transition: background-color 0.3s;
-        }
-        
+
         /* Style pour le bouton de bascule de sidebar */
-        #navbarToggleSidebar {
-            transition: all 0.3s;
-            border: 1px solid rgba(255,255,255,0.3);
+        .sidebar-toggle {
+            background: none;
+            border: none;
             color: white;
-            background: transparent;
-            border-radius: 5px;
-            padding: 0.4rem 0.8rem;
-            margin-left: 10px;
-        }
-        
-        #navbarToggleSidebar:hover {
-            background-color: rgba(255,255,255,0.1);
-            transform: scale(1.05);
-        }
-        
-        /* Ajustement pour l'alignement du bouton */
-        .navbar-brand-container {
-            display: flex;
-            align-items: center;
+            font-size: 1.2rem;
+            cursor: pointer;
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1001;
         }
         
         /* Style pour le toggle dark/light mode */
@@ -415,19 +366,7 @@
         }
         
         /* Correction pour le footer */
-        body {
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-        
-        .main-content {
-            flex: 1;
-            padding-bottom: 2rem; /* Espace avant le footer */
-        }
-        
-        /* Correction pour la sidebar */
-        .sidebar ~ footer {
+        .sidebar:not(.collapsed) ~ footer {
             margin-left: 250px;
             transition: margin-left 0.3s;
         }
@@ -462,6 +401,8 @@
         .sidebar-nav .nav-link[href*="stock"].active {
             border-left-color: #4cc9f0;
         }
+    
+        
     </style>
     {% block styles %}{% endblock %}
     {% block javascripts %}
@@ -470,32 +411,45 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
         <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
         <script src="https://npmcdn.com/flatpickr/dist/l10n/fr.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
         
         <script>
+        function confirmDelete(event, message) {
+        event.preventDefault();
+        Swal.fire({
+            title: 'Êtes-vous sûr ?',
+            text: message,
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Oui, supprimer !',
+            cancelButtonText: 'Annuler'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const form = event.target.closest('form');
+                if (form) form.submit();
+            }
+        });
+    }
             document.addEventListener('DOMContentLoaded', function() {
                 // Toggle sidebar state
                 const toggleSidebar = document.getElementById('toggleSidebar');
-                const mainContent = document.querySelector('.main-content');
                 
                 if (toggleSidebar) {
                     toggleSidebar.addEventListener('click', function() {
                         const sidebar = document.getElementById('sidebar');
                         sidebar.classList.toggle('collapsed');
-                        mainContent.classList.toggle('expanded');
                         
                         // Save state in localStorage
                         const isCollapsed = sidebar.classList.contains('collapsed');
                         localStorage.setItem('sidebarCollapsed', isCollapsed);
-                        
-                        // Update footer position
-                        updateFooterPosition();
                     });
                     
                     // Load saved state
                     const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
                     if (isCollapsed) {
                         document.getElementById('sidebar').classList.add('collapsed');
-                        mainContent.classList.add('expanded');
                     }
                 }
                 
@@ -518,43 +472,6 @@
                     }
                 });
                 
-                // Gestion du bouton dans la navbar pour basculer la sidebar
-                const navbarToggle = document.getElementById('navbarToggleSidebar');
-                if (navbarToggle) {
-                    navbarToggle.addEventListener('click', function() {
-                        // Déclencher le même comportement que le toggle de la sidebar
-                        document.getElementById('toggleSidebar').click();
-                    });
-                }
-                
-                // Mettre à jour l'icône du bouton selon l'état
-                const updateToggleIcon = function() {
-                    const navbarToggle = document.getElementById('navbarToggleSidebar');
-                    if (!navbarToggle) return;
-                    
-                    const icon = navbarToggle.querySelector('i');
-                    const sidebar = document.getElementById('sidebar');
-                    const isCollapsed = sidebar.classList.contains('collapsed');
-                    
-                    if (isCollapsed) {
-                        icon.classList.remove('fa-chevron-left');
-                        icon.classList.add('fa-chevron-right');
-                    } else {
-                        icon.classList.remove('fa-chevron-right');
-                        icon.classList.add('fa-chevron-left');
-                    }
-                };
-                
-                // Observer les changements d'état
-                const sidebar = document.getElementById('sidebar');
-                if (sidebar) {
-                    const observer = new MutationObserver(updateToggleIcon);
-                    observer.observe(sidebar, { attributes: true, attributeFilter: ['class'] });
-                    
-                    // Initialiser l'icône
-                    updateToggleIcon();
-                }
-                
                 // Gestion du dark/light mode
                 const themeToggle = document.getElementById('themeToggle');
                 const html = document.documentElement;
@@ -565,10 +482,10 @@
                 // Appliquer le thème sauvegardé
                 if (isDarkMode) {
                     html.setAttribute('data-theme', 'dark');
-                    themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
+                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-sun"></i>';
                 } else {
                     html.removeAttribute('data-theme');
-                    themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
+                    if (themeToggle) themeToggle.innerHTML = '<i class="fas fa-moon"></i>';
                 }
                 
                 // Ajouter l'écouteur d'événement
@@ -587,25 +504,6 @@
                         }
                     });
                 }
-                
-                // Fonction pour mettre à jour la position du footer
-                function updateFooterPosition() {
-                    const sidebar = document.getElementById('sidebar');
-                    const footer = document.querySelector('footer');
-                    
-                    if (sidebar && footer) {
-                        const isCollapsed = sidebar.classList.contains('collapsed');
-                        footer.style.marginLeft = isCollapsed ? '70px' : '250px';
-                    }
-                }
-                
-                // Initialiser la position du footer
-                updateFooterPosition();
-                
-                // Mettre à jour la position du footer lors du redimensionnement
-                window.addEventListener('resize', function() {
-                    updateFooterPosition();
-                });
             });
         </script>
     {% endblock %}
@@ -706,11 +604,11 @@
                 <i class="fas fa-bars"></i>
             </button>
             
-            <!-- Sidebar (uniquement pour utilisateurs authentifiés) -->
+            <!-- Sidebar (uniquement pour utilisateurs authentifiés) -->    
             <div class="sidebar" id="sidebar">
-                <div class="sidebar-nav">
+                <div class="sidebar-nav tgl">
                     <div class="sidebar-brand">
-                         <button id="toggleSidebar" class="sidebar-toggle ms-2 mt-5">
+                        <button id="toggleSidebar" class="sidebar-toggle ">
                             <i class="fas fa-chevron-left"></i>
                         </button>
                     </div>
@@ -719,7 +617,7 @@
                         {% if is_granted('ROLE_ADMIN') %}
                         <li class="nav-item">
                             <a class="nav-link {{ app.request.get('_route') == 'app_projet_statistiques' ? 'active' }}" href="{{ path('app_projet_statistiques') }}">
-                                <i class="fas fa-tachometer-alt"></i>
+                                <i class="fas fa-chart-bar"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>

@@ -11,7 +11,7 @@
             </a>
         </div>
 
-        <div class="card">
+        <div class="card" style="color: var(--text-color);">
             <div class="card-header bg-warning text-dark">
                 <h2 class="mb-0">
                     <i class="fas fa-edit me-2"></i>
@@ -50,7 +50,7 @@
                             <a href="{{ path('app_affaire_index') }}" class="btn btn-secondary me-2">
                                 <i class="fas fa-times me-2"></i> Annuler
                             </a>
-                            <a href="{{ path('app_affaire_show', {'id': affaire.id}) }}" class="btn btn-outline-dark">
+                            <a href="{{ path('app_affaire_show', {'id': affaire.id}) }}" class="btn btn-secondary">
                                 <i class="fas fa-arrow-left me-2"></i> Retour
                             </a>
                         </div>

@@ -2,38 +2,12 @@
 
 {% block title %}Mon Profil - ProjectFlow{% endblock %}
 
-{% block stylesheets %}
+{% block styles %}
     {{ parent() }}
     <style>
         .profile-container {
             max-width: 1200px;
             margin: 0 auto;
-            padding: 20px;
-        }
-        
-        .profile-card {
-            border-radius: 12px;
-            box-shadow: 0 6px 15px rgba(0,0,0,0.08);
-            overflow: hidden;
-            transition: transform 0.3s;
-            background: white;
-        }
-        
-        .profile-card:hover {
-            transform: translateY(-5px);
-        }
-        
-        .profile-header {
-            background: linear-gradient(135deg, #4361ee, #3f37c9);
-            color: white;
-            padding: 1.5rem;
-            text-align: center;
-        }
-        
-        .profile-avatar-container {
-            position: relative;
-            display: inline-block;
-            margin-bottom: 1rem;
         }
         
         .profile-avatar {
@@ -41,15 +15,44 @@
             height: 150px;
             border-radius: 50%;
             object-fit: cover;
-            border: 4px solid white;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+            border: 3px solid var(--primary);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s;
+        }
+        
+        .profile-avatar:hover {
+            transform: scale(1.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .avatar-container {
+            position: relative;
+            display: inline-block;
         }
         
         .avatar-overlay {
             position: absolute;
-            bottom: 0;
-            right: 0;
-            background: rgba(255,255,255,0.9);
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.5);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .avatar-container:hover .avatar-overlay {
+            opacity: 1;
+        }
+        
+        .change-avatar-btn {
+            color: white;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -58,322 +61,214 @@
             justify-content: center;
             cursor: pointer;
             transition: all 0.3s;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
         
-        .avatar-overlay:hover {
+        .change-avatar-btn:hover {
+            background: var(--primary);
             transform: scale(1.1);
-            background: #4361ee;
-            color: white;
         }
         
-        .form-section {
-            background: white;
+        .profile-section {
+            margin-bottom: 2rem;
+        }
+        
+        .profile-card {
             border-radius: 12px;
-            padding: 1.5rem;
-            margin-bottom: 1.5rem;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+            box-shadow: 0 6px 15px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            transition: transform 0.3s, box-shadow 0.3s;
         }
         
-        .form-section-header {
-            display: flex;
-            align-items: center;
-            margin-bottom: 1.5rem;
-            padding-bottom: 0.75rem;
-            border-bottom: 1px solid rgba(0,0,0,0.1);
+        .profile-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
         }
         
-        .form-section-title {
-            font-size: 1.25rem;
+        .profile-card-header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            padding: 1.25rem 1.5rem;
+            color: white;
             font-weight: 600;
-            margin: 0;
             display: flex;
             align-items: center;
-            color: #1d3557;
         }
         
-        .form-section-title i {
+        .profile-card-header i {
             margin-right: 10px;
-            color: #4361ee;
+            font-size: 1.2rem;
         }
         
-        .form-label {
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: #1d3557;
-        }
-        
-        .form-control {
-            border-radius: 8px;
-            padding: 0.75rem 1rem;
-            border: 1px solid #dee2e6;
-            transition: all 0.3s;
-        }
-        
-        .form-control:focus {
-            border-color: #4361ee;
-            box-shadow: 0 0 0 0.25rem rgba(67, 97, 238, 0.2);
-        }
-        
-        .btn-outline-primary {
-            border: 1px solid #4361ee;
-            color: #4361ee;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            transition: all 0.3s;
-        }
-        
-        .btn-outline-primary:hover {
-            background: #4361ee;
-            color: white;
-        }
-        
-        .btn-outline-secondary {
-            border: 1px solid #6c757d;
-            color: #6c757d;
-            border-radius: 8px;
-            padding: 0.5rem 1rem;
-            transition: all 0.3s;
-        }
-        
-        .btn-outline-secondary:hover {
-            background: #6c757d;
-            color: white;
-        }
-        
-        .btn-primary {
-            background: linear-gradient(to right, #4361ee, #3f37c9);
-            border: none;
-            border-radius: 8px;
-            padding: 0.75rem 2rem;
-            font-weight: 500;
-            transition: all 0.3s;
-        }
-        
-        .btn-primary:hover {
-            background: linear-gradient(to right, #3f37c9, #1d3557);
-            transform: translateY(-2px);
-        }
-        
-        .password-requirements {
-            font-size: 0.8rem;
-            color: #6c757d;
-            margin-top: 0.25rem;
-        }
-        
-        .error-message {
-            color: #dc3545;
-            font-size: 0.875rem;
-            margin-top: 0.25rem;
-        }
-        
-        .form-control.is-invalid {
-            border-color: #dc3545;
-        }
-        
-        .alert-danger {
-            border-radius: 8px;
-        }
-        
-        /* Améliorations pour le bouton de sélection d'image */
-        .file-input-container {
-            position: relative;
-            margin-top: 1rem;
-        }
-        
-        .file-input-label {
-            display: block;
-            background: #f8f9fa;
-            border: 1px dashed #dee2e6;
-            border-radius: 8px;
+        .profile-card-body {
             padding: 1.5rem;
-            text-align: center;
-            cursor: pointer;
+            background-color: var(--card-bg);
+        }
+        
+        .btn-profile-action {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border: none;
+            color: white;
+            padding: 0.5rem 1.25rem;
+            border-radius: 6px;
+            font-weight: 500;
             transition: all 0.3s;
         }
         
-        .file-input-label:hover {
-            border-color: #4361ee;
-            background: rgba(67, 97, 238, 0.05);
+        .btn-profile-action:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
         }
         
-        .file-input-label i {
-            font-size: 2rem;
-            color: #4361ee;
-            margin-bottom: 0.5rem;
+        .password-form-group {
+            background: rgba(var(--primary-rgb), 0.05);
+            border-radius: 8px;
+            padding: 1.25rem;
+            margin-bottom: 1.5rem;
         }
         
-        .file-input-label p {
-            margin: 0;
-            color: #6c757d;
-        }
-        
-        .file-input-label .btn {
-            margin-top: 0.5rem;
-        }
-        
-        /* Affichage du nom du fichier sélectionné */
-        .file-name {
-            display: block;
-            margin-top: 0.5rem;
-            font-size: 0.85rem;
-            color: #6c757d;
-            text-align: center;
+        @media (max-width: 768px) {
+            .profile-card {
+                margin-bottom: 1.5rem;
+            }
+            
+            .profile-avatar {
+                width: 120px;
+                height: 120px;
+            }
         }
     </style>
 {% endblock %}
 
 {% block body %}
-<div class="profile-container py-4">
+<div class="container profile-container mt-4">
     <div class="row">
-        <div class="col-lg-4 mb-4">
-            <div class="profile-card">
-                <div class="profile-header">
-                    <div class="profile-avatar-container">
-                        {% if app.user.profileImage %}
-                            <img src="{{ asset('uploads/profile_images/' ~ app.user.profileImage) }}" 
+        <div class="col-lg-4">
+            <div class="profile-card mb-4">
+                <div class="profile-card-body text-center">
+                    <div class="avatar-container mb-4">
+                        {% if user.profileImage %}
+                            <img src="{{ asset('uploads/profiles/' ~ user.profileImage) }}" 
                                  class="profile-avatar" 
-                                 alt="Photo de profil de {{ app.user.username }}">
+                                 alt="Avatar de {{ user.username }}">
                         {% else %}
-                            <img src="https://ui-avatars.com/api/?name={{ app.user.username }}&background=4361ee&color=fff&size=150" 
+                            <img src="https://ui-avatars.com/api/?name={{ user.username }}&background=4361ee&color=fff&size=150" 
                                  class="profile-avatar" 
-                                 alt="Avatar de {{ app.user.username }}">
+                                 alt="Avatar de {{ user.username }}">
                         {% endif %}
+                        <div class="avatar-overlay">
+                            <label for="profile_form_profileImage" class="change-avatar-btn">
+                                <i class="fas fa-camera"></i>
+                            </label>
+                        </div>
                     </div>
-                    <h3>{{ app.user.username }}</h3>
-                    <p class="mb-0">{{ app.user.email }}</p>
-                </div>
-                
-                <div class="p-3">
-                    <div class="d-grid gap-2 mt-3">
-                        <button class="btn btn-outline-primary" id="changePasswordBtn">
+                    
+                    <h4>{{ user.username }}</h4>
+                    <p class="text-muted">{{ user.email }}</p>
+                    
+                    <div class="d-grid gap-2 mt-4">
+                        <button class="btn btn-outline-primary btn-profile-action" 
+                                data-bs-toggle="modal" 
+                                data-bs-target="#changePasswordModal">
                             <i class="fas fa-lock me-2"></i>Modifier le mot de passe
                         </button>
                     </div>
                 </div>
             </div>
+            
+         
         </div>
         
         <div class="col-lg-8">
-            <div class="form-section">
-                <div class="form-section-header">
-                    <h3 class="form-section-title">
-                        <i class="fas fa-user-edit"></i>Informations personnelles
-                    </h3>
+            <div class="profile-card">
+                <div class="profile-card-header">
+                    <i class="fas fa-user-edit me-2"></i> Modifier le profil
                 </div>
-                
-                {{ form_start(profileForm, {'attr': {'id': 'profile-form'}}) }}
-                    {# Champ caché pour la photo de profil #}
-                    {{ form_row(profileForm.profileImage) }}
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ form_label(profileForm.username) }}</label>
-                                {{ form_widget(profileForm.username, {
-                                    'attr': {'class': 'form-control' ~ (profileForm.username.vars.errors|length > 0 ? ' is-invalid' : '')}
-                                }) }}
-                                {% if profileForm.username.vars.errors|length > 0 %}
-                                    <div class="error-message">
-                                        {{ form_errors(profileForm.username) }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ form_label(profileForm.email) }}</label>
-                                {{ form_widget(profileForm.email, {
-                                    'attr': {'class': 'form-control' ~ (profileForm.email.vars.errors|length > 0 ? ' is-invalid' : '')}
-                                }) }}
-                                {% if profileForm.email.vars.errors|length > 0 %}
-                                    <div class="error-message">
-                                        {{ form_errors(profileForm.email) }}
-                                    </div>
-                                {% endif %}
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div id="passwordFields" style="display: none;">
+                <div class="profile-card-body">
+                    {{ form_start(profileForm) }}
                         <div class="row mb-3">
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ form_label(profileForm.plainPassword.first) }}</label>
-                                    {{ form_widget(profileForm.plainPassword.first, {
-                                        'attr': {'class': 'form-control' ~ (profileForm.plainPassword.first.vars.errors|length > 0 ? ' is-invalid' : '')}
-                                    }) }}
-                                    <div class="password-requirements">
-                                        <small>Minimum 8 caractères</small>
-                                    </div>
-                                </div>
+                                {{ form_row(profileForm.username, {
+                                    'label': "Nom d'utilisateur",
+                                    'attr': {'class': 'form-control'}
+                                }) }}
                             </div>
                             <div class="col-md-6">
-                                <div class="mb-3">
-                                    <label class="form-label">{{ form_label(profileForm.plainPassword.second) }}</label>
-                                    {{ form_widget(profileForm.plainPassword.second, {
-                                        'attr': {'class': 'form-control' ~ (profileForm.plainPassword.second.vars.errors|length > 0 ? ' is-invalid' : '')}
-                                    }) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="row mb-3">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ form_label(profileForm.address) }}</label>
-                                {{ form_widget(profileForm.address, {
+                                {{ form_row(profileForm.email, {
+                                    'label': 'Adresse Email',
                                     'attr': {'class': 'form-control'}
                                 }) }}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ form_label(profileForm.phoneNumber) }}</label>
-                                {{ form_widget(profileForm.phoneNumber, {
+                        
+                        {{ form_row(profileForm.profileImage, {
+                            'label': 'Changer la photo de profil',
+                            'attr': {'class': 'form-control'}
+                        }) }}
+                        
+                        <h5 class="mt-4 mb-3">Informations complémentaires</h5>
+                        
+                        <div class="row mb-3">
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.address, {
+                                    'label': 'Adresse',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.phoneNumber, {
+                                    'label': 'Téléphone',
                                     'attr': {'class': 'form-control'}
                                 }) }}
                             </div>
                         </div>
-                    </div>
-                    
-                    <div class="row mb-4">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ form_label(profileForm.birthDate) }}</label>
-                                {{ form_widget(profileForm.birthDate, {
+                        
+                        <div class="row mb-4">
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.birthDate, {
+                                    'label': 'Date de naissance',
+                                    'attr': {'class': 'form-control'}
+                                }) }}
+                            </div>
+                            <div class="col-md-6">
+                                {{ form_row(profileForm.gender, {
+                                    'label': 'Genre',
                                     'attr': {'class': 'form-control'}
                                 }) }}
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="form-label">{{ form_label(profileForm.gender) }}</label>
-                                {{ form_widget(profileForm.gender, {
-                                    'attr': {'class': 'form-control'}
-                                }) }}
-                            </div>
+                        
+                        <div class="d-flex justify-content-end">
+                            <button type="submit" class="btn btn-primary px-4 btn-profile-action">
+                                <i class="fas fa-save me-2"></i>Enregistrer
+                            </button>
                         </div>
-                    </div>
-                    
-                    <div class="d-flex justify-content-end">
-                        <button type="submit" class="btn btn-primary px-4">
-                            <i class="fas fa-save me-2"></i>Enregistrer les modifications
-                        </button>
-                    </div>
-                {{ form_end(profileForm) }}
-                
-                {# Affichage des erreurs globales #}
-                {% if errors is defined and errors|length > 0 %}
-                    <div class="alert alert-danger mt-3">
-                        <ul class="mb-0">
-                            {% for error in errors %}
-                                <li>{{ error.message }}</li>
-                            {% endfor %}
-                        </ul>
-                    </div>
-                {% endif %}
+                    {{ form_end(profileForm) }}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal pour changer le mot de passe -->
+<div class="modal fade" id="changePasswordModal" tabindex="-1" aria-labelledby="changePasswordModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="changePasswordModalLabel">
+                    <i class="fas fa-lock me-2"></i> Modifier le mot de passe
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="alert alert-info">
+                    <i class="fas fa-info-circle me-2"></i>
+                    Pour modifier votre mot de passe, vous devez confirmer votre ancien mot de passe.
+                </div>
+                <a href="{{ path('app_profile_change_password') }}" class="btn btn-primary w-100">
+                    <i class="fas fa-key me-2"></i> Modifier mon mot de passe
+                </a>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fermer</button>
             </div>
         </div>
     </div>
@@ -383,91 +278,23 @@
 {% block javascripts %}
     {{ parent() }}
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            // Toggle password fields
-            const passwordBtn = document.getElementById('changePasswordBtn');
-            const passwordFields = document.getElementById('passwordFields');
-            
-            if (passwordBtn && passwordFields) {
-                passwordBtn.addEventListener('click', function() {
-                    if (passwordFields.style.display === 'none') {
-                        passwordFields.style.display = 'block';
-                        passwordBtn.innerHTML = '<i class="fas fa-times me-2"></i>Annuler la modification';
-                        passwordBtn.classList.remove('btn-outline-primary');
-                        passwordBtn.classList.add('btn-outline-secondary');
-                    } else {
-                        passwordFields.style.display = 'none';
-                        passwordBtn.innerHTML = '<i class="fas fa-lock me-2"></i>Modifier le mot de passe';
-                        passwordBtn.classList.remove('btn-outline-secondary');
-                        passwordBtn.classList.add('btn-outline-primary');
-                    }
-                });
+        // Aperçu de l'image sélectionnée
+        document.getElementById('profile_form_profileImage').addEventListener('change', function(event) {
+            if (this.files && this.files[0]) {
+                var reader = new FileReader();
+                reader.onload = function(e) {
+                    document.querySelector('.profile-avatar').src = e.target.result;
+                };
+                reader.readAsDataURL(this.files[0]);
             }
-            
-            // Trigger profile image upload when clicking on camera icon
-            const avatarBtn = document.getElementById('changeAvatarBtn');
-            const profileImageInput = document.querySelector('input[name="profile_form[profileImage]"]');
-            
-            if (avatarBtn && profileImageInput) {
-                avatarBtn.addEventListener('click', function() {
-                    profileImageInput.click();
-                });
-                
-                // Show preview when new image is selected
-                profileImageInput.addEventListener('change', function(e) {
-                    if (this.files && this.files[0]) {
-                        const reader = new FileReader();
-                        const avatar = document.querySelector('.profile-avatar');
-                        
-                        reader.onload = function(e) {
-                            avatar.src = e.target.result;
-                        }
-                        
-                        reader.readAsDataURL(this.files[0]);
-                        
-                        // Afficher le nom du fichier (optionnel)
-                        const fileName = this.files[0].name;
-                        const fileNameDisplay = document.getElementById('file-name-display');
-                        if (!fileNameDisplay) {
-                            const display = document.createElement('div');
-                            display.id = 'file-name-display';
-                            display.className = 'file-name';
-                            display.textContent = 'Fichier sélectionné : ' + fileName;
-                            avatarBtn.parentNode.appendChild(display);
-                        } else {
-                            fileNameDisplay.textContent = 'Fichier sélectionné : ' + fileName;
-                        }
-                    }
-                });
-            }
-            
-            // Validation client pour la date de naissance
-            const birthDateInput = document.querySelector('input[name="profile_form[birthDate]"]');
-            if (birthDateInput) {
-                birthDateInput.addEventListener('change', function() {
-                    const selectedDate = new Date(this.value);
-                    const today = new Date();
-                    
-                    if (selectedDate > today) {
-                        this.setCustomValidity('La date de naissance ne peut pas être dans le futur');
-                    } else {
-                        this.setCustomValidity('');
-                    }
-                });
-            }
-            
-            // Validation client pour le mot de passe
-            const passwordInputs = document.querySelectorAll('input[name*="plainPassword"]');
-            if (passwordInputs.length > 0) {
-                passwordInputs.forEach(input => {
-                    input.addEventListener('input', function() {
-                        if (this.value.length > 0 && this.value.length < 8) {
-                            this.setCustomValidity('Le mot de passe doit contenir au moins 8 caractères');
-                        } else {
-                            this.setCustomValidity('');
-                        }
-                    });
-                });
+        });
+        
+        // Affichage du nom du fichier
+        document.getElementById('profile_form_profileImage').addEventListener('change', function(e) {
+            var fileName = e.target.files[0].name;
+            var nextSibling = e.target.nextElementSibling;
+            if (nextSibling) {
+                nextSibling.innerText = fileName;
             }
         });
     </script>

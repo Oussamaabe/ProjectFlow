@@ -1,8 +1,7 @@
 <form method="post" action="{{ path('app_group_delete', {'id': group.id}) }}" 
-      onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce groupe ?');"
       class="d-inline">
     <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ group.id) }}">
-    <button class="btn btn-sm btn-danger">
+    <button class="btn btn-sm btn-danger" onclick="confirmDelete(event, 'Êtes-vous sûr de vouloir supprimer ce groupe ?')">
         <i class="fas fa-trash"></i>
     </button>
 </form>

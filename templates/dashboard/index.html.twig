@@ -1,43 +1,56 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Dashboard{% endblock %}
+{% block styles %}
+<style>
+            .chart-area {
+            position: relative;
+            height: 20rem;
+            width: 100%;
+        }
 
+        .chart-pie {
+            position: relative;
+            height: 15rem;
+            width: 100%;
+        }
+</style>
+{% endblock %}
 {% block body %}
 <div class="container mt-4">
     <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1>Dashboard</h1>
-       
+        <h1 style="color: var(--text-color);">Dashboard</h1>
     </div>
 
     <!-- Cartes de synthèse -->
     <div class="row mb-4">
         <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-header bg-primary text-white">
+            <div class="card text-center" style="background-color: var(--card-bg);">
+                <div class="card-header" style="background: linear-gradient(to right, var(--success), var(--primary)); color: white;">
                     <h5 class="mb-0">Total Projets</h5>
                 </div>
                 <div class="card-body">
-                    <div class="stat-number">{{ totalProjets }}</div>
+                    <div class="stat-number" style="color: var(--primary);">{{ totalProjets }}</div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-header bg-success text-white">
+            <div class="card text-center" style="background-color: var(--card-bg);">
+                <div class="card-header" style="background: linear-gradient(to right, var(--success), var(--primary)); color: white;">
                     <h5 class="mb-0">Projets Terminés</h5>
                 </div>
                 <div class="card-body">
-                    <div class="stat-number">{{ projetsTermines }}</div>
+                    <div class="stat-number" style="color: var(--primary);">{{ projetsTermines }}</div>
                 </div>
             </div>
         </div>
         <div class="col-md-4">
-            <div class="card text-center">
-                <div class="card-header bg-warning text-dark">
+            <div class="card text-center" style="background-color: var(--card-bg);">
+                <div class="card-header" style="background: linear-gradient(to right, var(--success), var(--primary)); color: white;">
                     <h5 class="mb-0">Projets en Cours</h5>
                 </div>
                 <div class="card-body">
-                    <div class="stat-number">{{ projetsEnCours }}</div>
+                    <div class="stat-number" style="color: var(--primary);">{{ projetsEnCours }}</div>
                 </div>
             </div>
         </div>
@@ -46,8 +59,8 @@
     <!-- Graphiques -->
     <div class="row mb-4">
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-info text-white">
+            <div class="card" style="background-color: var(--card-bg);">
+                <div class="card-header" style="background: linear-gradient(to right, var(--info), var(--primary)); color: white;">
                     <h5 class="mb-0">Répartition des Statuts</h5>
                 </div>
                 <div class="card-body">
@@ -58,8 +71,8 @@
             </div>
         </div>
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-purple text-white">
+            <div class="card" style="background-color: var(--card-bg);">
+                <div class="card-header" style="background: linear-gradient(to right, #6f42c1, #a370f7); color: white;">
                     <h5 class="mb-0">Évolution Mensuelle</h5>
                 </div>
                 <div class="card-body">
@@ -74,43 +87,43 @@
     <!-- Autres statistiques -->
     <div class="row">
         <div class="col-md-6">
-            <div class="card mb-4">
-                <div class="card-header bg-secondary text-white">
+            <div class="card mb-4" style="background-color: var(--card-bg);">
+                <div class="card-header" style="background: linear-gradient(to right, var(--secondary), var(--primary)); color: white;">
                     <h5 class="mb-0">Délai Moyen de Réalisation</h5>
                 </div>
                 <div class="card-body text-center">
-                    <div class="stat-number">{{ averageCompletionTime ?? 'N/A' }}</div>
+                    <div class="stat-number" style="color: var(--secondary);">{{ averageCompletionTime ?? 'N/A' }}</div>
                 </div>
             </div>
         </div>
         
         <div class="col-md-6">
-            <div class="card">
-                <div class="card-header bg-dark text-white">
+            <div class="card" style="background-color: var(--card-bg);">
+                <div class="card-header" style="background: linear-gradient(to right, var(--dark), var(--primary)); color: white;">
                     <h5 class="mb-0">Top 5 Projets par Budget</h5>
                 </div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <table class="table table-striped">
+                        <table class="table" style="color: var(--text-color);">
                             <thead>
                                 <tr>
-                                    <th>Projet</th>
-                                    <th>Budget Total</th>
+                                    <th >Projet</th>
+                                    <th >Budget Total</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {% for projet in topBudgetProjects %}
                                     <tr>
                                         <td>
-                                            <a href="{{ path('app_projet_show', {'id': projet.id}) }}">
+                                            <a href="{{ path('app_projet_show', {'id': projet.id}) }}" >
                                                 {{ projet.nom }}
                                             </a>
                                         </td>
-                                        <td>{{ projet.total_budget is defined ? projet.total_budget|number_format(2) : '0.00' }} €</td>
+                                        <td >{{ projet.total_budget is defined ? projet.total_budget|number_format(2) : '0.00' }} €</td>
                                     </tr>
                                 {% else %}
                                     <tr>
-                                        <td colspan="2">Aucun projet trouvé</td>
+                                        <td colspan="2" style="color: var(--text-color);">Aucun projet trouvé</td>
                                     </tr>
                                 {% endfor %}
                             </tbody>
@@ -143,12 +156,15 @@
                     maintainAspectRatio: false,
                     plugins: {
                         legend: {
-                            position: 'bottom'
+                            position: 'bottom',
+                            labels: {
+                                color: 'var(--text-color)'
+                            }
                         },
                         tooltip: {
-                            backgroundColor: "rgb(255,255,255)",
-                            bodyFontColor: "#858796",
-                            borderColor: '#dddfeb',
+                            backgroundColor: "var(--card-bg)",
+                            bodyFontColor: "var(--text-color)",
+                            borderColor: 'var(--border-color)',
                             borderWidth: 1,
                             padding: 15,
                             displayColors: false,
@@ -193,12 +209,19 @@
                         x: {
                             grid: {
                                 display: false
+                            },
+                            ticks: {
+                                color: 'var(--text-color)'
                             }
                         },
                         y: {
                             ticks: {
                                 beginAtZero: true,
-                                precision: 0
+                                precision: 0,
+                                color: 'var(--text-color)'
+                            },
+                            grid: {
+                                color: 'var(--border-color)'
                             }
                         }
                     },
@@ -207,9 +230,9 @@
                             display: false
                         },
                         tooltip: {
-                            backgroundColor: "rgb(255,255,255)",
-                            bodyFontColor: "#858796",
-                            borderColor: '#dddfeb',
+                            backgroundColor: "var(--card-bg)",
+                            bodyFontColor: "var(--text-color)",
+                            borderColor: 'var(--border-color)',
                             borderWidth: 1,
                             padding: 15,
                             displayColors: false
@@ -222,9 +245,6 @@
 {% endblock %}
 
 <style>
-    .bg-purple {
-        background: linear-gradient(to right, #6f42c1, #a370f7);
-    }
     .chart-area {
         position: relative;
         height: 20rem;

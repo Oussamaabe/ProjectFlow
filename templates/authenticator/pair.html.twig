@@ -1,16 +1,36 @@
+{# Pair #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Pair{% endblock %}
 
 {% block body %}
-<div class="container mt-5 text-center">
-    <h1 class="mb-4">Scan the QR Code</h1>
-
-    <img alt="QR Code" src="{{ qrCodeUri }}" class="img-fluid mb-4" />
-
-    <form method="post">
-        <input type="hidden" name="secret" value="{{ secret }}" />
-        <button type="submit" class="btn btn-success">Validate Pairing</button>
-    </form>
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm text-center">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0">Appairage 2FA</h1>
+                </div>
+                <div class="card-body">
+                    <p class="lead mb-4">
+                        Scannez le QR code avec votre application d'authentification
+                    </p>
+                    
+                    <div class="mb-4">
+                        <img alt="QR Code" src="{{ qrCodeUri }}" class="img-fluid rounded shadow" />
+                    </div>
+                    
+                    <form method="post">
+                        <input type="hidden" name="secret" value="{{ secret }}" />
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-link me-2"></i> Valider l'appairage
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

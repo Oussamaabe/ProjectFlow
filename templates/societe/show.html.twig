@@ -1,102 +1,122 @@
+{# Détails d'une société #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Détails de la Société{% endblock %}
 
 {% block body %}
-    <h1>Détails de la société "{{ societe.raisonSociale }}"</h1>
+    <div class="container mt-4">
+        <h1>Détails de la société "{{ societe.raisonSociale }}"</h1>
 
-    <table class="table table-striped">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ societe.id }}</td>
-            </tr>
-            <tr>
-                <th>Raison Sociale</th>
-                <td>{{ societe.raisonSociale }}</td>
-            </tr>
-            <tr>
-                <th>Capital</th>
-                <td>
-                    {% if societe.capital %}
-                        {{ societe.capital|number_format(2, ',', ' ') }} MAD
-                    {% else %}
-                        -
+        <div class="card mb-4">
+            <div class="card-body">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <th>Id</th>
+                            <td>{{ societe.id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Raison Sociale</th>
+                            <td>{{ societe.raisonSociale }}</td>
+                        </tr>
+                        <tr>
+                            <th>Capital</th>
+                            <td>
+                                {% if societe.capital %}
+                                    {{ societe.capital|number_format(2, ',', ' ') }} MAD
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>RC</th>
+                            <td>{{ societe.rc ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>ICE</th>
+                            <td>{{ societe.ice ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>TP</th>
+                            <td>{{ societe.tp ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>IF Fiscal</th>
+                            <td>{{ societe.ifFiscal ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>CNSS</th>
+                            <td>{{ societe.cnss ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Téléphone</th>
+                            <td>{{ societe.telephone ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Fax</th>
+                            <td>{{ societe.fax ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Email</th>
+                            <td>{{ societe.email ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>Site Web</th>
+                            <td>
+                                {% if societe.siteWeb %}
+                                    <a href="{{ societe.siteWeb }}" target="_blank">{{ societe.siteWeb }}</a>
+                                {% else %}
+                                    -
+                                {% endif %}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>Banque</th>
+                            <td>{{ societe.banque ?: '-' }}</td>
+                        </tr>
+                        <tr>
+                            <th>RIB</th>
+                            <td>{{ societe.rib ?: '-' }}</td>
+                        </tr>
+                        {% if societe.documents is defined and societe.documents|length > 0 %}
+                            <tr>
+                                <th>Documents joints</th>
+                                <td>
+                                    <ul>
+                                        {% for document in societe.documents %}
+                                            <li>
+                                                {{ document.nom }}
+                                                {% if document.fichier %}
+                                                    — <a href="{{ asset('uploads/documents/' ~ document.fichier) }}" target="_blank">Voir</a>
+                                                {% endif %}
+                                            </li>
+                                        {% endfor %}
+                                    </ul>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    </tbody>
+                </table>
+
+                <div class="d-flex justify-content-end gap-2 mt-4">
+                    <a href="{{ path('app_societe_index') }}" class="btn btn-secondary">
+                        <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+                    </a>
+                    <a href="{{ path('app_societe_edit', {'id': societe.id}) }}" class="btn btn-primary">
+                        <i class="fas fa-edit me-1"></i> Modifier
+                    </a>
+                    {% if is_granted('ROLE_ADMIN') %}
+                        <form method="post" action="{{ path('app_societe_delete', {'id': societe.id}) }}" 
+                              onsubmit="confirmDelete(event, 'Êtes-vous sûr de vouloir supprimer cette société ?');">
+                            <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ societe.id) }}">
+                            <button class="btn btn-danger">
+                                <i class="fas fa-trash me-1"></i> Supprimer
+                            </button>
+                        </form>
                     {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>RC</th>
-                <td>{{ societe.rc ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>ICE</th>
-                <td>{{ societe.ice ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>TP</th>
-                <td>{{ societe.tp ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>IF Fiscal</th>
-                <td>{{ societe.ifFiscal ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>CNSS</th>
-                <td>{{ societe.cnss ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>Téléphone</th>
-                <td>{{ societe.telephone ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>Fax</th>
-                <td>{{ societe.fax ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>Email</th>
-                <td>{{ societe.email ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>Site Web</th>
-                <td>
-                    {% if societe.siteWeb %}
-                        <a href="{{ societe.siteWeb }}" target="_blank">{{ societe.siteWeb }}</a>
-                    {% else %}
-                        -
-                    {% endif %}
-                </td>
-            </tr>
-            <tr>
-                <th>Banque</th>
-                <td>{{ societe.banque ?: '-' }}</td>
-            </tr>
-            <tr>
-                <th>RIB</th>
-                <td>{{ societe.rib ?: '-' }}</td>
-            </tr>
-            {# Si tu as une relation documents, affiche-les aussi #}
-            {% if societe.documents is defined and societe.documents|length > 0 %}
-                <tr>
-                    <th>Documents joints</th>
-                    <td>
-                        <ul>
-                            {% for document in societe.documents %}
-                                <li>
-                                    {{ document.nom }}
-                                    {% if document.fichier %}
-                                        — <a href="{{ asset('uploads/documents/' ~ document.fichier) }}" target="_blank">Voir</a>
-                                    {% endif %}
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    </td>
-                </tr>
-            {% endif %}
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_societe_index') }}" class="btn btn-outline-secondary">Retour à la liste</a>
-    <a href="{{ path('app_societe_edit', {'id': societe.id}) }}" class="btn btn-primary">Modifier</a>
-
-    {% endblock %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

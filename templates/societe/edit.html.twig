@@ -104,7 +104,6 @@
     }
     .input-group-text {
         padding: 0.75rem;
-        background-color: #f8f9fa;
         border: 1px solid #ddd;
         border-left: none;
         border-radius: 0 4px 4px 0;
@@ -116,12 +115,12 @@
 <div class="form-container">
     <div class="form-header">
         <h1>Modifier la société</h1>
-        <a href="{{ path('app_societe_index') }}" class="btn btn-outline">
+        <a href="{{ path('app_societe_index') }}" class="btn btn-secondary">
             Retour à la liste
         </a>
     </div>
 
-    <div class="form-card">
+    <div class="form-card" style="color: var(--primary);">
         {{ form_start(form) }}
 
         <div class="form-section">

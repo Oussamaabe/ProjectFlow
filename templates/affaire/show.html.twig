@@ -3,8 +3,8 @@
 {% block title %}Détails de l'affaire - {{ affaire.titre }}{% endblock %}
 
 {% block body %}
-    <div class="container mt-4">
-        <div class="d-flex justify-content-between align-items-center mb-4">
+    <div class="container mt-4" >
+        <div class="d-flex justify-content-between align-items-center mb-4" >
             <h1>Affaire: {{ affaire.titre }}</h1>
             <div>
                 <a href="{{ path('app_affaire_index') }}" class="btn btn-secondary">
@@ -13,7 +13,7 @@
             </div>
         </div>
         
-        <div class="card mb-4">
+        <div class="card mb-4" style="color: var(--text-color);">
             <div class="card-body">
                 <div class="row">
                     <div class="col-md-6">
@@ -34,14 +34,14 @@
                         {% endif %}
                     </div>
                     <div class="col-md-6">
-                        <h5>Détails</h5>
+                        <h5>Détails :</h5>
                         {% if affaire.description %}
                             <p>{{ affaire.description }}</p>
                         {% endif %}
                         
                         {% if affaire.resultat %}
                             <div class="mt-3">
-                                <h5>Résultat</h5>
+                                <h5>Résultat :</h5>
                                 <p>{{ affaire.resultat }}</p>
                             </div>
                         {% endif %}

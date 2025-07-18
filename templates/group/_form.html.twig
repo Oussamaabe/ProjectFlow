@@ -1,4 +1,3 @@
-{# templates/group/_form.html.twig #}
 {% form_theme form 'bootstrap_5_layout.html.twig' %}
 
 {{ form_start(form) }}
@@ -6,13 +5,15 @@
         <div class="col-md-6">
             {{ form_row(form.name, {
                 'label': 'Nom du groupe',
-                'attr': {'class': 'form-control-lg'}
+                'label_attr': {'style': 'color: var(--text-color);'},
+                'attr': {'class': 'form-control-lg', 'style': 'background-color: var(--card-bg); color: var(--text-color); border-color: var(--border-color);'}
             }) }}
         </div>
         <div class="col-md-6">
             {{ form_row(form.roles, {
                 'label': 'Rôles attribués',
-                'attr': {'class': 'form-select-lg'}
+                'label_attr': {'style': 'color: var(--text-color);'},
+                'attr': {'class': 'form-select-lg', 'style': 'background-color: var(--card-bg); color: var(--text-color); border-color: var(--border-color);'}
             }) }}
         </div>
     </div>
@@ -20,7 +21,8 @@
     <div class="mb-4">
         {{ form_row(form.users, {
             'label': 'Membres du groupe',
-            'attr': {'class': 'form-select-lg', 'size': '8'}
+            'label_attr': {'style': 'color: var(--text-color);'},
+            'attr': {'class': 'form-select-lg', 'size': '8', 'style': 'background-color: var(--card-bg); color: var(--text-color); border-color: var(--border-color);'}
         }) }}
     </div>
 
@@ -42,10 +44,10 @@
 <!-- Delete Modal -->
 <div class="modal fade" id="deleteModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog">
-        <div class="modal-content">
+        <div class="modal-content" style="background-color: var(--card-bg); color: var(--text-color);">
             <div class="modal-header">
                 <h5 class="modal-title">Confirmer la suppression</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close" style="filter: invert(1);"></button>
             </div>
             <div class="modal-body">
                 Êtes-vous sûr de vouloir supprimer ce groupe ? Cette action est irréversible.

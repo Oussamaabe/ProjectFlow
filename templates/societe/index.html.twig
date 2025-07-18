@@ -1,146 +1,88 @@
-{# templates/societe/index.html.twig #}
+{# Liste des sociétés #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Liste des Sociétés{% endblock %}
 
-{% block styles %}
-<style>
-    .societe-container {
-        max-width: 1200px;
-        margin: 2rem auto;
-        padding: 0 1rem;
-    }
-    .societe-header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 2rem;
-    }
-    .societe-table {
-        width: 100%;
-        border-collapse: collapse;
-        box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
-    .societe-table th, 
-    .societe-table td {
-        padding: 1rem;
-        text-align: left;
-        border-bottom: 1px solid #eee;
-    }
-    .societe-table th {
-        background-color: #f8f9fa;
-        font-weight: 600;
-    }
-    .societe-table tr:hover {
-        background-color: #f8f9fa;
-    }
-    .btn {
-        padding: 0.5rem 1rem;
-        border-radius: 4px;
-        text-decoration: none;
-        display: inline-flex;
-        align-items: center;
-        gap: 0.5rem;
-    }
-    .btn-primary {
-        background-color: #007bff;
-        color: white;
-        border: none;
-    }
-    .btn-action {
-        padding: 0.3rem 0.6rem;
-        font-size: 0.9rem;
-    }
-    .btn-view {
-        background-color: #17a2b8;
-        color: white;
-    }
-    .btn-edit {
-        background-color: #ffc107;
-        color: #212529;
-    }
-    .btn-delete {
-        background-color: #dc3545;
-        color: white;
-    }
-    .empty-state {
-        text-align: center;
-        padding: 3rem;
-        color: #6c757d;
-    }
-    .capital-amount {
-        font-weight: 600;
-        color: #28a745;
-    }
-</style>
-{% endblock %}
-
 {% block body %}
-<div class="societe-container">
-    <div class="societe-header">
+<div class="container mt-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
         <h1>Liste des Sociétés</h1>
         <a href="{{ path('app_societe_new') }}" class="btn btn-primary">
-            <span>+</span> Créer une société
+            <i class="fas fa-plus me-1"></i> Créer une société
         </a>
     </div>
 
     {% if societes|length > 0 %}
-        <table class="societe-table">
-            <thead>
-                <tr>
-                    <th>Raison Sociale</th>
-                    <th>Capital</th>
-                    <th>ICE</th>
-                    <th>Contact</th>
-                    <th>Actions</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for societe in societes %}
-                <tr>
-                    <td>{{ societe.raisonSociale }}</td>
-                    <td class="capital-amount">
-                        {% if societe.capital %}
-                            {{ societe.capital|number_format(2, ',', ' ') }} MAD
-                        {% else %}
-                            -
-                        {% endif %}
-                    </td>
-                    <td>{{ societe.ice ?? '-' }}</td>
-                    <td>
-                        <div>{{ societe.telephone ?? '-' }}</div>
-                        <small>{{ societe.email ?? '' }}</small>
-                    </td>
-                    <td>
-                        <div style="display: flex; gap: 0.5rem;">
-                            <a href="{{ path('app_societe_show', {'id': societe.id}) }}" 
-                               class="btn btn-action btn-view"
-                               title="Voir">
-                                Details
-                            </a>
-                            <a href="{{ path('app_societe_edit', {'id': societe.id}) }}" 
-                               class="btn btn-action btn-edit"
-                               title="Modifier">
-                                Modifier
-                            </a>
-                            <form method="post" 
-                                  action="{{ path('app_societe_delete', {'id': societe.id}) }}" 
-                                  onsubmit="return confirm('Supprimer cette société ?')">
-                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ societe.id) }}">
-                                <button type="submit" class="btn btn-action btn-delete">Supprimer</button>
-                            </form>
-                        </div>
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
+        <div class="card">
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover">
+                        <thead class="table-light">
+                            <tr>
+                                <th>Raison Sociale</th>
+                                <th>Capital</th>
+                                <th>ICE</th>
+                                <th>Contact</th>
+                                <th class="text-end">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for societe in societes %}
+                            <tr>
+                                <td>{{ societe.raisonSociale }}</td>
+                                <td>
+                                    {% if societe.capital %}
+                                        <span class="fw-bold text-success">{{ societe.capital|number_format(2, ',', ' ') }} MAD</span>
+                                    {% else %}
+                                        -
+                                    {% endif %}
+                                </td>
+                                <td>{{ societe.ice ?? '-' }}</td>
+                                <td>
+                                    <div>{{ societe.telephone ?? '-' }}</div>
+                                    <small class="text-muted">{{ societe.email ?? '' }}</small>
+                                </td>
+                                <td class="text-end">
+                                    <div class="d-flex justify-content-end gap-2">
+                                        <a href="{{ path('app_societe_show', {'id': societe.id}) }}" 
+                                           class="btn btn-sm btn-outline-info" title="Voir">
+                                            <i class="fas fa-eye"></i>
+                                        </a>
+                                        <a href="{{ path('app_societe_edit', {'id': societe.id}) }}" 
+                                           class="btn btn-sm btn-outline-primary" title="Modifier">
+                                            <i class="fas fa-edit"></i>
+                                        </a>
+                                        {% if is_granted('ROLE_ADMIN') %}
+                                            <form method="post" 
+                                                  action="{{ path('app_societe_delete', {'id': societe.id}) }}" 
+                                                  class="d-inline"
+                                                  onsubmit="confirmDelete(event, 'Êtes-vous sûr de vouloir supprimer cette société ?');">
+                                                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ societe.id) }}">
+                                                <button type="submit" class="btn btn-sm btn-outline-danger">
+                                                    <i class="fas fa-trash"></i>
+                                                </button>
+                                            </form>
+                                        {% endif %}
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
     {% else %}
-        <div class="empty-state">
-            <h3>Aucune société enregistrée</h3>
-            <p>
-                <a href="{{ path('app_societe_new') }}">Cliquez ici pour créer votre première société</a>
-            </p>
+        <div class="card">
+            <div class="card-body text-center py-5">
+                <i class="fas fa-building fa-3x text-muted mb-3"></i>
+                <h3 class="text-muted">Aucune société enregistrée</h3>
+                <p class="mt-3">
+                    <a href="{{ path('app_societe_new') }}" class="btn btn-primary">
+                        <i class="fas fa-plus me-1"></i> Créer votre première société
+                    </a>
+                </p>
+            </div>
         </div>
     {% endif %}
 </div>

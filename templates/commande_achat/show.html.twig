@@ -1,38 +1,88 @@
+{# commande_achat/show.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}CommandeAchat{% endblock %}
+{% block title %}Détails de la commande{% endblock %}
 
 {% block body %}
-    <h1>CommandeAchat</h1>
-
-    <table class="table">
-        <tbody>
-            <tr>
-                <th>Id</th>
-                <td>{{ commande_achat.id }}</td>
-            </tr>
-            <tr>
-                <th>Numero</th>
-                <td>{{ commande_achat.numero }}</td>
-            </tr>
-            <tr>
-                <th>DateCommande</th>
-                <td>{{ commande_achat.dateCommande ? commande_achat.dateCommande|date('Y-m-d H:i:s') : '' }}</td>
-            </tr>
-            <tr>
-                <th>Statut</th>
-                <td>{{ commande_achat.statut }}</td>
-            </tr>
-            <tr>
-                <th>Total</th>
-                <td>{{ commande_achat.total }}</td>
-            </tr>
-        </tbody>
-    </table>
-
-    <a href="{{ path('app_commande_achat_index') }}">back to list</a>
-
-    <a href="{{ path('app_commande_achat_edit', {'id': commande_achat.id}) }}">edit</a>
-
-    {{ include('commande_achat/_delete_form.html.twig') }}
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Commande #{{ commande_achat.numero }}</h1>
+            <div>
+                <a href="{{ path('app_commande_achat_index') }}" class="btn btn-outline-secondary">
+                    <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+                </a>
+            </div>
+        </div>
+        
+        <div class="card mb-4" style="color: var(--text-color);">
+            <div class="card-header bg-primary text-white">
+                <h2 class="mb-0">
+                    <i class="fas fa-file-invoice me-2"></i>
+                    Détails de la commande
+                </h2>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <h5 style="color: var(--primary);">Informations générales</h5>
+                        <p><strong>Numéro:</strong> {{ commande_achat.numero }}</p>
+                        <p><strong>Date de commande:</strong> {{ commande_achat.dateCommande|date('d/m/Y') }}</p>
+                        <p><strong>Statut:</strong> 
+                            {% if commande_achat.statut == 'réceptionnée' %}
+                                <span class="badge bg-success">Réceptionnée</span>
+                            {% elseif commande_achat.statut == 'envoyée' %}
+                                <span class="badge bg-warning text-dark">Envoyée</span>
+                            {% else %}
+                                <span class="badge bg-secondary">Brouillon</span>
+                            {% endif %}
+                        </p>
+                    </div>
+                    <div class="col-md-6">
+                        <h5 style="color: var(--primary);">Total</h5>
+                        <p class="display-6">{{ commande_achat.total|number_format(2, ',', ' ') }} MAD</p>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <h5>Articles commandés</h5>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th>Article</th>
+                                <th>Quantité</th>
+                                <th>Prix unitaire</th>
+                                <th>Total</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for ligne in commande_achat.lignes %}
+                                <tr>
+                                    <td>{{ ligne.article.designation }}</td>
+                                    <td>{{ ligne.quantite }}</td>
+                                    <td>{{ ligne.prixUnitaire|number_format(2, ',', ' ') }} MAD</td>
+                                    <td>{{ (ligne.quantite * ligne.prixUnitaire)|number_format(2, ',', ' ') }} MAD</td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        <div class="d-flex justify-content-end gap-2">
+            <a href="{{ path('app_commande_achat_index') }}" class="btn btn-outline-secondary">
+                <i class="fas fa-list me-1"></i> Liste des commandes
+            </a>
+            <a href="{{ path('app_commande_achat_edit', {'id': commande_achat.id}) }}" class="btn btn-warning">
+                <i class="fas fa-edit me-1"></i> Modifier
+            </a>
+            <form method="post" action="{{ path('app_commande_achat_delete', {'id': commande_achat.id}) }}" 
+                  onsubmit="confirmDelete(event, 'Êtes-vous sûr de vouloir supprimer cette commande ?');">
+                <input type="hidden" name="_token" value="{{ csrf_token('delete' ~ commande_achat.id) }}">
+                <button class="btn btn-danger">
+                    <i class="fas fa-trash me-1"></i> Supprimer
+                </button>
+            </form>
+        </div>
+    </div>
 {% endblock %}

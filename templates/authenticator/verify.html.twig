@@ -1,27 +1,53 @@
+{# Verify OTP #}
 {% extends 'base.html.twig' %}
 
 {% block title %}Verify OTP{% endblock %}
 
 {% block body %}
 <div class="container mt-5">
-    <h1 class="mb-4">Enter Your OTP</h1>
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm">
+                <div class="card-header bg-primary text-white">
+                    <h1 class="mb-0">Vérification OTP</h1>
+                </div>
+                <div class="card-body">
+                    <form method="post">
+                        <div class="mb-3">
+                            <label for="otp" class="form-label">Code à usage unique</label>
+                            <input type="text" name="otp" id="otp" class="form-control" required autofocus>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-check-circle me-2"></i> Vérifier
+                            </button>
+                        </div>
+                    </form>
 
-    <form method="post">
-        <div class="mb-3">
-            <label for="otp" class="form-label">One-Time Password</label>
-            <input type="text" name="otp" id="otp" class="form-control" required>
+                    {% if result is defined %}
+                        <script>
+                            document.addEventListener('DOMContentLoaded', function() {
+                                {% if result %}
+                                    Swal.fire({
+                                        icon: 'success',
+                                        title: 'Succès',
+                                        text: 'OTP validé avec succès!',
+                                        confirmButtonColor: 'var(--primary)'
+                                    });
+                                {% else %}
+                                    Swal.fire({
+                                        icon: 'error',
+                                        title: 'Erreur',
+                                        text: 'OTP invalide',
+                                        confirmButtonColor: 'var(--primary)'
+                                    });
+                                {% endif %}
+                            });
+                        </script>
+                    {% endif %}
+                </div>
+            </div>
         </div>
-        <button type="submit" class="btn btn-primary">Verify</button>
-    </form>
-
-    {% if result is defined %}
-        <div class="mt-3">
-            {% if result %}
-                <div class="alert alert-success">OTP validé avec succès!</div>
-            {% else %}
-                <div class="alert alert-danger">OTP invalide</div>
-            {% endif %}
-        </div>
-    {% endif %}
+    </div>
 </div>
 {% endblock %}

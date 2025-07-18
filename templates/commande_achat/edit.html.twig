@@ -1,13 +1,250 @@
+{# commande_achat/edi.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit CommandeAchat{% endblock %}
+{% block title %}Nouvelle commande d'achat{% endblock %}
 
 {% block body %}
-    <h1>Edit CommandeAchat</h1>
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1>Modifier une commande</h1>
+            <a href="{{ path('app_commande_achat_index') }}" class="btn btn-secondary">
+                <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+            </a>
+        </div>
+        
+        <div class="card border-0 shadow">
+            <div class="card-header bg-primary text-white py-3">
+                <h2 class="mb-0 d-flex align-items-center">
+                    <i class="fas fa-file-invoice me-3"></i>
+                    Commande d'achat
+                </h2>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                    <div class="row mb-4 g-3">
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                {{ form_widget(form.numero, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.numero) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                {{ form_widget(form.dateCommande, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.dateCommande) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                {{ form_widget(form.statut, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.statut) }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-floating">
+                            {{ form_widget(form.fournisseur, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                            {{ form_label(form.fournisseur) }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                  
+                        
+                        <div id="lignes-list" 
+                             data-prototype="{{ form_widget(form.lignes.vars.prototype)|e('html_attr') }}"
+                             data-index="{{ form.lignes|length > 0 ? form.lignes|last.vars.name + 1 : 0 }}">
+                            {% for ligneForm in form.lignes %}
+                                <div class="ligne-item card mb-3 border">
+                                    <div class="card-body">
+                                        <div class="row g-3 align-items-end">
+                                            <div class="col-md-5">
+                                                <div class="form-floating">
+                                                    {{ form_widget(ligneForm.article, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                                    {{ form_label(ligneForm.article) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-floating">
+                                                    {{ form_widget(ligneForm.quantite, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                                    {{ form_label(ligneForm.quantite) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3  ">
+                                                <div class="form-floating">
+                                                    {{ form_widget(ligneForm.prixUnitaire, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                                    {{ form_label(ligneForm.prixUnitaire) }}
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2 d-flex">
+                                                <button type="button" class="btn btn-danger remove-ligne ">
+                                                    <i class="fas fa-trash "></i> Supprimer
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between mt-4 pt-3 border-top">
+                        <button type="reset" class="btn btn-secondary">
+                            <i class="fas fa-undo me-1"></i> Réinitialiser
+                        </button>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save me-1"></i> Enregistrer la commande
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const collectionHolder = document.getElementById('lignes-list');
+        const addButton = document.getElementById('add-ligne');
+        let index = parseInt(collectionHolder.dataset.index);
 
-    {{ include('commande_achat/_form.html.twig', {'button_label': 'Update'}) }}
+        const createLigneForm = (index) => {
+            const prototype = collectionHolder.dataset.prototype;
+            const newForm = prototype.replace(/__name__/g, index);
+            
+            const div = document.createElement('div');
+            div.classList.add('ligne-item', 'card', 'mb-3', 'border');
+            div.innerHTML = `
+                <div class="card-body">
+                    <div class="row g-3 align-items-end">
+                        <div class="col-md-5">
+                            <div class="form-floating">
+                                ${newForm.replace('name="', 'class="form-control" name="')
+                                         .replace('id="', 'placeholder=" " id="')}
+                                <label for="commande_achat_lignes_${index}_article">Article</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                            <div class="form-floating">
+                                <input type="number" id="commande_achat_lignes_${index}_quantite" 
+                                       name="commande_achat[lignes][${index}][quantite]" 
+                                       class="form-control" placeholder=" " />
+                                <label for="commande_achat_lignes_${index}_quantite">Quantité</label>
+                            </div>
+                        </div>
+                        <div class="col-md-3">
+                            <div class="form-floating">
+                                <input type="number" id="commande_achat_lignes_${index}_prixUnitaire" 
+                                       name="commande_achat[lignes][${index}][prixUnitaire]" 
+                                       class="form-control" placeholder=" " step="0.01" />
+                                <label for="commande_achat_lignes_${index}_prixUnitaire">Prix unitaire</label>
+                            </div>
+                        </div>
+                        <div class="col-md-2 d-flex">
+                            <button type="button" class="btn btn-danger remove-ligne w-100">
+                                <i class="fas fa-trash me-1"></i> Supprimer
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            return div;
+        };
 
-    <a href="{{ path('app_commande_achat_index') }}">back to list</a>
+        addButton.addEventListener('click', () => {
+            const newForm = createLigneForm(index);
+            collectionHolder.appendChild(newForm);
+            
+            newForm.querySelector('.remove-ligne').addEventListener('click', () => {
+                if (collectionHolder.querySelectorAll('.ligne-item').length > 1) {
+                    newForm.remove();
+                } else {
+                    Swal.fire({
+                        title: 'Attention',
+                        text: 'Une commande doit avoir au moins une ligne',
+                        icon: 'warning',
+                        confirmButtonColor: '#4361ee',
+                    });
+                }
+            });
+            
+            index++;
+            collectionHolder.dataset.index = index;
+        });
 
-    {{ include('commande_achat/_delete_form.html.twig') }}
+        document.querySelectorAll('.remove-ligne').forEach(button => {
+            button.addEventListener('click', (e) => {
+                if (collectionHolder.querySelectorAll('.ligne-item').length > 1) {
+                    e.target.closest('.ligne-item').remove();
+                } else {
+                    Swal.fire({
+                        title: 'Attention',
+                        text: 'Une commande doit avoir au moins une ligne',
+                        icon: 'warning',
+                        confirmButtonColor: '#4361ee',
+                    });
+                }
+            });
+        });
+
+        const form = document.querySelector('form');
+        form.addEventListener('submit', (e) => {
+            if (collectionHolder.querySelectorAll('.ligne-item').length === 0) {
+                e.preventDefault();
+                Swal.fire({
+                    title: 'Commande incomplète',
+                    text: 'Vous devez ajouter au moins une ligne à la commande',
+                    icon: 'error',
+                    confirmButtonColor: '#4361ee',
+                });
+            }
+        });
+    });
+    </script>
+
+    <style>
+        /* Correction du problème de fond sur les labels flottants */
+        .form-floating > label {
+            padding: 0.5rem 0.75rem;
+            color: #6c757d;
+            transition: all 0.2s;
+            background: transparent !important; /* Fond transparent */
+        }
+        
+        .form-floating > .form-control:focus ~ label,
+        .form-floating > .form-control:not(:placeholder-shown) ~ label {
+            transform: scale(0.85) translateY(-0.8rem) translateX(0.15rem);
+            padding: 0 0.5rem;
+            color: var(--primary);
+            font-wight: bold  !important;
+            font-size: 1.1rem;
+            background: transparent !important; /* Fond transparent */
+        }
+        
+        /* Assurer que l'input est au-dessus du label */
+        .form-floating > .form-control {
+            position: relative;
+            z-index: 2;
+        }
+        
+        /* Styles supplémentaires */
+        .ligne-item {
+            transition: all 0.3s ease;
+            border-color: var(--border-color) !important;
+        }
+        
+        .ligne-item:hover {
+            box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .remove-ligne {
+            transition: all 0.2s;
+        }
+        
+        .remove-ligne:hover {
+            transform: scale(1.05);
+        }
+    </style>
 {% endblock %}

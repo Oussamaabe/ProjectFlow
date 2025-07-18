@@ -1,69 +1,168 @@
-{# templates/commande_achat/new.html.twig #}
+{# commande_achat/new.html.twig #}
+{% extends 'base.html.twig' %}
 
-{{ form_start(form) }}
+{% block title %}Nouvelle commande d'achat{% endblock %}
 
-    {{ form_row(form.numero) }}
-    {{ form_row(form.dateCommande) }}
-    {{ form_row(form.statut) }}
-    {{ form_row(form.fournisseur) }}
+{% block body %}
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2 mb-0">Créer une commande</h1>
+            <a href="{{ path('app_commande_achat_index') }}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+            </a>
+        </div>
+        
+        <div class="card border-0 shadow">
+            <div class="card-header bg-primary text-white py-3">
+                <div class="d-flex align-items-center">
+                    <i class="fas fa-file-invoice fa-lg me-3"></i>
+                    <h2 class="h5 mb-0">Nouvelle commande d'achat</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                {{ form_start(form) }}
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                {{ form_widget(form.numero, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.numero, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                {{ form_widget(form.dateCommande, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.dateCommande, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                {{ form_widget(form.statut, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.statut, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4">
+                        <div class="form-floating">
+                            {{ form_widget(form.fournisseur, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                            {{ form_label(form.fournisseur, null, {'label_attr': {'class': 'form-label'}}) }}
+                        </div>
+                    </div>
+                    
+                    <div class="mb-4" style="color: var(--text-color);">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <h4 class="h5 mb-0">
+                                <i class="fas fa-boxes me-2"></i>
+                                Lignes de commande
+                            </h4>
+                            <button type="button" id="add-ligne" class="btn btn-sm btn-success">
+                                <i class="fas fa-plus me-1"></i> Ajouter une ligne
+                            </button>
+                        </div>
+                        
+                        <div id="lignes-list" data-prototype="{{ form_widget(form.lignes.vars.prototype)|e('html_attr') }}" class="row g-3">
+                            {% for ligneForm in form.lignes %}
+                                <div class="col-12 ligne-item">
+                                    <div class="card border">
+                                        <div class="card-body p-3">
+                                            <div class="row g-3 align-items-end">
+                                                <div class="col-md-5">
+                                                    <div class="form-floating">
+                                                        {{ form_widget(ligneForm.article, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                                        {{ form_label(ligneForm.article, null, {'label_attr': {'class': 'form-label'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-floating">
+                                                        {{ form_widget(ligneForm.quantite, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                                        {{ form_label(ligneForm.quantite, null, {'label_attr': {'class': 'form-label'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-floating">
+                                                        {{ form_widget(ligneForm.prixUnitaire, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                                        {{ form_label(ligneForm.prixUnitaire, null, {'label_attr': {'class': 'form-label'}}) }}
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-1 d-flex justify-content-end">
+                                                    <button type="button" class="btn btn-outline-danger remove-ligne">
+                                                        <i class="fas fa-trash"></i>
+                                                    </button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between border-top pt-4 mt-3">
+                        <button type="reset" class="btn btn-secondary px-4">
+                            <i class="fas fa-undo me-2"></i> Réinitialiser
+                        </button>
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fas fa-save me-2"></i> Enregistrer
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
+    
+    <script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const collectionHolder = document.getElementById('lignes-list');
+        const addButton = document.getElementById('add-ligne');
+        let index = collectionHolder.querySelectorAll('.ligne-item').length;
 
-    <h4>Lignes de commande</h4>
-    <ul id="lignes-list" data-prototype="{{ form_widget(form.lignes.vars.prototype)|e('html_attr') }}">
-        {% for ligneForm in form.lignes %}
-            <li>
-                {{ form_row(ligneForm) }}
-                <button type="button" class="remove-ligne">Supprimer</button>
-            </li>
-        {% endfor %}
-    </ul>
-
-    <button type="button" id="add-ligne">Ajouter une ligne</button>
-
-    <button type="submit">Enregistrer</button>
-
-{{ form_end(form) }}
-
-<script>
-document.addEventListener('DOMContentLoaded', () => {
-    const collectionHolder = document.getElementById('lignes-list');
-    const addButton = document.getElementById('add-ligne');
-
-    // Setup an index based on existing inputs
-    let index = collectionHolder.querySelectorAll('li').length;
-
-    addButton.addEventListener('click', () => {
-        // Get the prototype explained in data attribute
-        const prototype = collectionHolder.dataset.prototype;
-
-        // Replace '__name__' in the prototype HTML with the index
-        const newForm = prototype.replace(/__name__/g, index);
-
-        // Create a new list item and insert the form inside
-        const li = document.createElement('li');
-        li.innerHTML = newForm;
-
-        // Add a remove button
-        const removeButton = document.createElement('button');
-        removeButton.type = 'button';
-        removeButton.innerText = 'Supprimer';
-        removeButton.classList.add('remove-ligne');
-        li.appendChild(removeButton);
-
-        collectionHolder.appendChild(li);
-
-        // Add event listener to remove button
-        removeButton.addEventListener('click', () => {
-            li.remove();
+        addButton.addEventListener('click', () => {
+            const prototype = collectionHolder.dataset.prototype;
+            const newForm = prototype.replace(/__name__/g, index);
+            
+            const div = document.createElement('div');
+            div.classList.add('col-12', 'ligne-item');
+            div.innerHTML = `
+                <div class="card border" style="color: var(--text-color);">
+                    <div class="card-body p-3">
+                        <div class="row g-3 align-items-end">
+                            <div class="col-md-5">${newForm}</div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-3"></div>
+                            <div class="col-md-1 d-flex justify-content-end">
+                                <button type="button" class="btn btn-outline-danger remove-ligne">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>`;
+            
+            collectionHolder.appendChild(div);
+            
+            // Ajouter les classes flottantes aux nouveaux champs
+            const fields = div.querySelectorAll('.form-control');
+            fields.forEach(field => {
+                field.classList.add('form-control');
+                const label = field.previousElementSibling;
+                if (label && label.tagName === 'LABEL') {
+                    label.classList.add('form-label');
+                }
+            });
+            
+            const removeBtn = div.querySelector('.remove-ligne');
+            removeBtn.addEventListener('click', () => {
+                div.remove();
+            });
+            
+            index++;
         });
 
-        index++;
-    });
-
-    // Add remove button event listeners for existing items
-    collectionHolder.querySelectorAll('.remove-ligne').forEach(button => {
-        button.addEventListener('click', (e) => {
-            e.target.closest('li').remove();
+        document.querySelectorAll('.remove-ligne').forEach(button => {
+            button.addEventListener('click', (e) => {
+                e.target.closest('.ligne-item').remove();
+            });
         });
     });
-});
-</script>
+    </script>
+{% endblock %}

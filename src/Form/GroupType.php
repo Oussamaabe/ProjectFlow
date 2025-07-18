@@ -28,7 +28,7 @@ class GroupType extends AbstractType
                     'placeholder' => 'Entrez un nom de groupe',
                     'class' => 'form-control'
                 ],
-                'help' => 'Ce nom sera utilisé pour identifier le groupe.',
+                
             ])
 
             ->add('users', EntityType::class, [
@@ -56,7 +56,7 @@ class GroupType extends AbstractType
                 'attr' => [
                     'class' => 'role-checkboxes'
                 ],
-                'help' => 'Sélectionnez les rôles à assigner à ce groupe.',
+               
             ])
 
             ->add('permissions', EntityType::class, [

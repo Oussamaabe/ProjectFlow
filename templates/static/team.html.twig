@@ -1,26 +1,43 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Notre Équipe - ProjectFlow{% endblock %}
-
+{% block styles %}
+<style>
+            /* Static pages styling */
+        .team-member {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        
+        .team-member img {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--primary);
+            margin: 0 auto 1rem;
+        }
+</style>
+{% endblock %}
 {% block body %}
 <div class="container py-5">
-    <h1 class="text-center mb-5">Rencontrez notre équipe</h1>
+    <h1 class="text-center mb-5" style="color: var(--text-color);">Rencontrez notre équipe</h1>
     
     <div class="row justify-content-center">
         <div class="col-lg-8 text-center mb-5">
-            <p class="lead">Une équipe passionnée dédiée à révolutionner la gestion de projets</p>
+            <p class="lead" style="color: var(--text-color);">Une équipe passionnée dédiée à révolutionner la gestion de projets</p>
         </div>
     </div>
     
     <div class="row">
         <div class="col-md-6 mb-5">
-            <div class="team-member card h-100 border-0 shadow">
+            <div class="team-member card h-100 border-0" style="background-color: var(--card-bg); box-shadow: var(--shadow);">
                 <div class="card-body p-4 text-center">
-                    <img src="https://ui-avatars.com/api/?name=Oussama+Belfakir&size=200&background=0D8ABC&color=fff" 
+                    <img src="oussama.jpeg" 
                          alt="Oussama Belfakir" class="rounded-circle mb-4" style="width: 150px; height: 150px;">
-                    <h3>Oussama Belfakir</h3>
-                    <h5 class="text-primary mb-3">Développeur Full-Stack</h5>
-                    <p class="mb-4">
+                    <h3 style="color: var(--text-color);">Oussama Belfakir</h3>
+                    <h5 class="mb-3" style="color: var(--primary);">Développeur Full-Stack</h5>
+                    <p class="mb-4" style="color: var(--text-color);">
                         Expert en Symfony et React avec 5 ans d'expérience dans le développement d'applications web complexes.
                         Passionné par la création de solutions techniques élégantes et performantes.
                     </p>
@@ -40,13 +57,13 @@
         </div>
         
         <div class="col-md-6 mb-5">
-            <div class="team-member card h-100 border-0 shadow">
+            <div class="team-member card h-100 border-0" style="background-color: var(--card-bg); box-shadow: var(--shadow);">
                 <div class="card-body p-4 text-center">
-                    <img src="https://ui-avatars.com/api/?name=Aimrane+Zaroual&size=200&background=0D8ABC&color=fff" 
+                    <img src="aimrane.jpeg" 
                          alt="Aimrane Zaroual" class="rounded-circle mb-4" style="width: 150px; height: 150px;">
-                    <h3>Aimrane Zaroual</h3>
-                    <h5 class="text-primary mb-3">Designer UX/UI</h5>
-                    <p class="mb-4">
+                    <h3 style="color: var(--text-color);">Aimrane Zaroual</h3>
+                    <h5 class="mb-3" style="color: var(--primary);">Designer UX/UI</h5>
+                    <p class="mb-4" style="color: var(--text-color);">
                         Spécialiste en design d'interface et expérience utilisateur avec une approche centrée sur l'humain.
                         Transforme des idées complexes en interfaces intuitives et esthétiques.
                     </p>
@@ -68,10 +85,10 @@
     
     <div class="row mt-5">
         <div class="col-lg-8 mx-auto">
-            <div class="card bg-light border-0">
+            <div class="card border-0" style="background-color: var(--card-bg);">
                 <div class="card-body p-5 text-center">
-                    <h2 class="mb-4">Rejoignez notre équipe</h2>
-                    <p class="lead mb-4">Nous recherchons des talents passionnés pour nous aider à construire l'avenir de la gestion de projet</p>
+                    <h2 class="mb-4" style="color: var(--text-color);">Rejoignez notre équipe</h2>
+                    <p class="lead mb-4" style="color: var(--text-color);">Nous recherchons des talents passionnés pour nous aider à construire l'avenir de la gestion de projet</p>
                     <a href="{{ path('app_contact') }}" class="btn btn-outline-primary">
                         <i class="fas fa-briefcase me-2"></i>Voir les offres d'emploi
                     </a>

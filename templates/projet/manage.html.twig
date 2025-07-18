@@ -85,8 +85,8 @@
 {% endblock %}
 
 {% block body %}
-<div class="container mt-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
+<div class="container mt-4" style="color: var(--text-color);">
+    <div class="d-flex justify-content-between align-items-center mb-4" style="color: var(--text-color);">
         <h1>Gestion du Projet: {{ projet.nom }}</h1>
         <a href="{{ path('app_projet_show', {'id': projet.id}) }}" class="btn btn-info">
             <i class="fas fa-eye me-2"></i> Voir détails
@@ -94,7 +94,7 @@
     </div>
 
     {{ form_start(form) }}
-        <ul class="nav nav-tabs mb-4" id="managementTabs" role="tablist">
+        <ul class="nav nav-tabs mb-4" id="managementTabs" role="tablist" style="color: var(--text-color);">
             <li class="nav-item" role="presentation">
                 <button class="nav-link" id="deadlines-tab" data-bs-toggle="tab" data-bs-target="#deadlines" type="button" role="tab">
                     <i class="fas fa-calendar-alt me-1"></i> Délais
@@ -117,13 +117,13 @@
             </li>
         </ul>
 
-        <div class="tab-content" id="managementTabsContent">
+        <div class="tab-content" id="managementTabsContent" style="color: var(--text-color);">
             <!-- Délais -->
-            <div class="tab-pane fade" id="deadlines" role="tabpanel">
+            <div class="tab-pane fade" id="deadlines" role="tabpanel" style="color: var(--text-color);">
                 <div class="collection" data-collection="deadlines" data-prototype="{{ form_widget(form.deadlines.vars.prototype)|e('html_attr') }}">
                     {% for deadline in form.deadlines %}
-                        <div class="card mb-3">
-                            <div class="card-body">
+                        <div class="card mb-3" style="color: var(--text-color);">
+                            <div class="card-body" style="color: var(--text-color);">
                                 {{ form_row(deadline.name) }}
                                 {{ form_row(deadline.planned, {'attr': {'class': 'date-picker'}}) }}
                                 {{ form_row(deadline.actual, {'attr': {'class': 'date-picker'}}) }}
@@ -137,16 +137,16 @@
             </div>
             
             <!-- Bordereau des Prix -->
-            <div class="tab-pane fade" id="prices" role="tabpanel">
+            <div class="tab-pane fade" id="prices" role="tabpanel" style="color: var(--text-color);">
                 <div class="d-flex justify-content-end mb-3">
                     <button type="button" class="btn btn-sm btn-primary add-price-item">
                         <i class="fas fa-plus me-1"></i> Ajouter élément
                     </button>
                 </div>
-                <div class="collection" data-collection="priceList" data-prototype="{{ form_widget(form.priceList.vars.prototype)|e('html_attr') }}">
+                <div class="collection" style="color: var(--text-color);" data-collection="priceList" data-prototype="{{ form_widget(form.priceList.vars.prototype)|e('html_attr') }}">
                     {% for item in form.priceList %}
                         <div class="card mb-3">
-                            <div class="card-body">
+                            <div class="card-body" style="color: var(--text-color);">
                                 {{ form_row(item.description) }}
                                 {{ form_row(item.quantity) }}
                                 {{ form_row(item.unit) }}
@@ -160,13 +160,13 @@
             </div>
             
             <!-- Factures -->
-            <div class="tab-pane fade" id="invoices" role="tabpanel">
+            <div class="tab-pane fade" id="invoices" role="tabpanel" style="color: var(--text-color);">
                 <div class="d-flex justify-content-end mb-3">
                     <button type="button" class="btn btn-sm btn-primary add-invoice">
                         <i class="fas fa-plus me-1"></i> Ajouter facture
                     </button>
                 </div>
-                <div class="collection" data-collection="invoices" data-prototype="{{ form_widget(form.invoices.vars.prototype)|e('html_attr') }}">
+                <div class="collection" style="color: var(--text-color);" data-collection="invoices" data-prototype="{{ form_widget(form.invoices.vars.prototype)|e('html_attr') }}">
                     {% for invoice in form.invoices %}
                         <div class="card mb-3">
                             <div class="card-body">
@@ -182,13 +182,13 @@
             </div>
             
             <!-- Documents -->
-            <div class="tab-pane fade" id="documents" role="tabpanel">
+            <div class="tab-pane fade" style="color: var(--text-color);" id="documents" role="tabpanel">
                 <div class="d-flex justify-content-end mb-3">
                     <button type="button" class="btn btn-sm btn-primary add-document">
                         <i class="fas fa-plus me-1"></i> Ajouter document
                     </button>
                 </div>
-                <div class="collection" data-collection="documents" data-prototype="{{ form_widget(form.documents.vars.prototype)|e('html_attr') }}">
+                <div class="collection" style="color: var(--text-color);" data-collection="documents" data-prototype="{{ form_widget(form.documents.vars.prototype)|e('html_attr') }}">
                     {% for document in form.documents %}
                         <div class="card mb-3">
                             <div class="card-body">

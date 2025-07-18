@@ -1,13 +1,87 @@
+{# fournisseur/new.html.twig et fournisseur/edit.html.twig #}
 {% extends 'base.html.twig' %}
 
-{% block title %}Edit Fournisseur{% endblock %}
+{% block title %}{{ edit_mode|default(false) ? 'Modifier' : 'Nouveau' }} fournisseur{% endblock %}
 
 {% block body %}
-    <h1>Edit Fournisseur</h1>
-
-    {{ include('fournisseur/_form.html.twig', {'button_label': 'Update'}) }}
-
-    <a href="{{ path('app_fournisseur_index') }}">back to list</a>
-
-    {{ include('fournisseur/_delete_form.html.twig') }}
+    <div class="container mt-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="h2 mb-0">{{ edit_mode|default(false) ? 'Modifier' : 'Nouveau' }} fournisseur</h1>
+            <a href="{{ path('app_fournisseur_index') }}" class="btn btn-outline-primary">
+                <i class="fas fa-arrow-left me-1"></i> Retour à la liste
+            </a>
+        </div>
+        
+        <div class="card border-0 shadow" style="color: var(--text-color);">
+            <div class="card-header {{ edit_mode|default(false) ? 'bg-warning' : 'bg-primary' }} text-white py-3">
+                <div class="d-flex align-items-center">
+                    <i class="fas {{ edit_mode|default(false) ? 'fa-edit' : 'fa-plus' }} fa-lg me-3"></i>
+                    <h2 class="h5 mb-0">{{ edit_mode|default(false) ? 'Modification' : 'Création' }} d'un fournisseur</h2>
+                </div>
+            </div>
+            <div class="card-body">
+                {{ form_start(form, {'attr': {'class': 'needs-validation', 'novalidate': 'novalidate'}}) }}
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form_widget(form.nom, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.nom, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form_widget(form.email, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.email, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form_widget(form.telephone, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.telephone, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form_widget(form.adresse, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.adresse, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form_widget(form.pays, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.pays, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-floating">
+                                {{ form_widget(form.identifiantFiscal, {'attr': {'class': 'form-control', 'placeholder': ' '}}) }}
+                                {{ form_label(form.identifiantFiscal, null, {'label_attr': {'class': 'form-label'}}) }}
+                            </div>
+                        </div>
+                        
+                        <div class="col-md-6">
+                            <div class="form-check form-switch">
+                                {{ form_widget(form.actif, {'attr': {'class': 'form-check-input', 'role': 'switch'}}) }}
+                                {{ form_label(form.actif, null, {'label_attr': {'class': 'form-check-label'}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="d-flex justify-content-between border-top pt-4 mt-4">
+                        <button type="reset" class="btn btn-outline-secondary px-4">
+                            <i class="fas fa-undo me-2"></i> Réinitialiser
+                        </button>
+                        <button type="submit" class="btn btn-success px-4">
+                            <i class="fas fa-save me-2"></i> {{ edit_mode|default(false) ? 'Mettre à jour' : 'Enregistrer' }}
+                        </button>
+                    </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+    </div>
 {% endblock %}
