@@ -1,6 +1,5 @@
 # ProjectFlow - Enterprise Project Management Suite 🚀
 
-![ProjectFlow Banner](https://via.placeholder.com/1200x400/2c3e50/ffffff?text=ProjectFlow+-+Comprehensive+Project+Management)
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Symfony Version](https://img.shields.io/badge/Symfony-6.3-blue.svg)](https://symfony.com/)
