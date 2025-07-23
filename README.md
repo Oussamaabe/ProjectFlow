@@ -152,8 +152,6 @@ Distributed under the MIT License. See `LICENSE` for more information.
 Project Maintainer: [Oussama Belfakir](https://github.com/Oussamaabe)  
 Email: oussama.be005@gmail.com
 
-Project Link: [https://github.com/Oussamaabe/ProjectFlow](https://github.com/Oussamaabe/ProjectFlow)
-
 ---
 
 **ProjectFlow - Streamlining Enterprise Project Management**  
